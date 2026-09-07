@@ -16,6 +16,9 @@ A Django + HTMX family chore app: people assign tasks to each other, the receive
 - **Tone:** playful colors/stickers/sounds; **chore names stay normal** (“Unload dishwasher”).
 - **Accounts:** real logins, one shared household.
 - **Stack:** [Django](https://www.djangoproject.com/) + HTMX, a little JS for drag-and-drop.
+- **Dev environment:** [Dev Containers](https://containers.dev/) — open the repo in a container; do not install Python, `uv`, or project deps on the host.
+- **Host prerequisites only:** Docker (e.g. Docker Desktop) + a Dev Containers–capable editor (Cursor/VS Code). Nothing else for the app stack.
+- **Deps:** [`uv`](https://docs.astral.sh/uv/) inside the container (`pyproject.toml` + lockfile); no host `venv` / `pip`.
 
 
 
@@ -74,14 +77,25 @@ flowchart LR
 
 ## Technical sketch
 
+```mermaid
+flowchart LR
+  host[Host: Docker + editor]
+  host -->|open folder in container| dc[DevContainer]
+  dc -->|uv sync| deps[Project deps]
+  deps -->|uv run| django[Django app :8000]
+```
+
+- DevContainer image includes Python + `uv`; `postCreateCommand` (or equivalent) runs `uv sync`.
 - Server-rendered Django templates; HTMX for inbox and “mark done”.
 - Drag-and-drop: small JS (HTML5 drag or a tiny library) posting the new day to Django.
-- Postgres or SQLite.
+- SQLite for local/dev in-container (Postgres deferred unless needed later).
+- Forward port `8000`; run with `uv run python manage.py runserver`.
 
 
 
 ## Implementation checklist
 
+- [ ] DevContainer + `uv` project layout (`.devcontainer/`, `pyproject.toml`, lockfile); open in container and `uv sync`
 - [ ] Django project: auth, household, invite code
 - [ ] Assign tasks + inbox (accept / decline / send back)
 - [ ] S/M/L Tetris week board + weekend overflow
@@ -91,5 +105,7 @@ flowchart LR
 
 
 ## What “done” looks like
+
+Environment: clone → open in DevContainer → deps via `uv` → run the app with no host Python.
 
 A family of 2–4 demo users can assign, reject, schedule, overflow to weekend, complete, and see a weekly winner — all in the browser, no random chore lottery.
