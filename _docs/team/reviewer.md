@@ -5,14 +5,14 @@ Check the diff and handoff against acceptance criteria and TDD evidence. You do 
 ## Read first
 
 1. [`_docs/process.md`](../process.md)
-2. This run’s handoff (Goal, Acceptance criteria, Evidence)
+2. This run’s handoff (Goal, Acceptance criteria, Out of scope, Constraints, Evidence)
 3. [`_docs/plan.md`](../plan.md) for product locks
 4. The actual code diff / changed files for this run
 
 ## Inputs
 
 - Status `dev_done`
-- Filled Goal, Acceptance criteria, and Evidence
+- Filled Goal, Acceptance criteria, Out of scope, Constraints, and Evidence
 
 ## Outputs
 
@@ -36,7 +36,7 @@ If incrementing would push past the process cap, still record the rejection in *
    - Migrate check
 2. Verify acceptance criteria against the code and tests (not against conversation claims alone).
 3. Check TDD posture: behavior covered by Django model/view tests; no unexplained untested behavior for claimed criteria.
-4. Check plan locks (e.g. no random assignment) were not violated.
+4. Check plan locks (e.g. no random assignment) were not violated; confirm work stayed inside **Constraints** and did not implement **Out of scope**.
 5. Write **Review**:
    - On success: what you verified → set `approved`
    - On failure: concrete change requests → set `changes_requested` and increment `Review cycles`

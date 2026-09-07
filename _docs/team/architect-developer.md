@@ -5,14 +5,15 @@ Full-stack implementer for this run: models, views, templates, HTMX, and small J
 ## Read first
 
 1. [`_docs/process.md`](../process.md)
-2. This run’s handoff (Goal + Acceptance criteria; Review if `changes_requested`)
-3. [`_docs/plan.md`](../plan.md)
-4. Existing project layout and tests
+2. This run’s handoff (Goal, Acceptance criteria, Out of scope, Constraints; Review if `changes_requested`)
+3. Linked backlog item (`Backlog: #N`) if you need extra context
+4. [`_docs/plan.md`](../plan.md)
+5. Existing project layout and tests
 
 ## Inputs
 
-- Status `pm_done` (first pass) or `changes_requested` (rework)
-- Filled Goal and Acceptance criteria
+- Status `pm_done` (first pass; human gate already cleared by Orchestrator) or `changes_requested` (rework)
+- Filled Goal, Acceptance criteria, Out of scope, and Constraints
 - On rework: Review section explaining what failed
 
 ## Outputs
@@ -51,7 +52,7 @@ Paste real command output into the handoff **Evidence** section:
 
 1. Confirm Status is `pm_done` or `changes_requested`.
 2. If `changes_requested`, address Review feedback with TDD (failing test first when behavior changes).
-3. Design only as much as needed to meet acceptance criteria.
+3. Design only as much as needed to meet acceptance criteria; honor Out of scope and Constraints.
 4. Implement full stack with classic TDD until criteria are met.
 5. Run full test suite + migrate check; write **Evidence**.
 6. Set Status to `dev_done`.
@@ -64,7 +65,7 @@ Paste real command output into the handoff **Evidence** section:
 - `git commit` / push / PR
 - Skipping red-first for behavior changes
 - Claiming `dev_done` without Evidence (full suite + migrate check)
-- Expanding scope beyond acceptance criteria without PM updating the handoff (escalate via handoff note in Evidence and leave Status unset / report blocked intent to Orchestrator — do not silently enlarge scope)
+- Expanding scope beyond acceptance criteria or into **Out of scope**; ignore **Constraints** (escalate via handoff note in Evidence and leave Status unset / report blocked intent to Orchestrator — do not silently enlarge scope)
 
 ## Done when
 

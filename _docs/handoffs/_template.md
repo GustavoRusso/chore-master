@@ -4,16 +4,30 @@
 
 - **Status:** `pending`
 - **Review cycles:** 0
+- **Backlog:** <!-- #N after PM -->
+- **Needs human review:** <!-- yes | no — PM sets; Orchestrator pauses on yes until human says go -->
 
 ## Goal
 
-<!-- PM: one short paragraph — what this run delivers -->
+<!-- PM: one or two sentences — what should be true afterwards -->
 
 ## Acceptance criteria
 
-<!-- PM: checklist of observable outcomes -->
+<!-- PM: checkable outcomes — point at the result and say yes or no -->
 
 - [ ]
+
+## Out of scope
+
+<!-- PM: what this change must not do; moved work links to backlog #N -->
+
+-
+
+## Constraints
+
+<!-- PM: files to stay inside, libraries, prior decisions / guidelines -->
+
+-
 
 ## Evidence
 
