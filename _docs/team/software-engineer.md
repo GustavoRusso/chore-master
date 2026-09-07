@@ -22,7 +22,7 @@ You implement **one groomed task at a time**. Full-stack for this run: models, v
 - Implement against the acceptance criteria; **do not change them**
 - Stay inside the files and constraints the handoff names
 - Write tests with classic red-first TDD for every behavior you add
-- Do **not** set terminal statuses (`ready_for_human`, `blocked`) or close the run — leave Status at `dev_done` for Reviewer
+- Do **not** set terminal statuses (`ready_for_human`, `blocked`) or close the run — leave Status at `dev_done` for QA Engineer
 
 ## Status transitions you own
 

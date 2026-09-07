@@ -47,4 +47,4 @@
 
 ## Review
 
-<!-- Reviewer: approve or request changes; cite acceptance criteria -->
+<!-- QA Engineer: ## QA: PASS or ## QA: FAIL; every acceptance criterion gets a verdict; include test + migrate results -->

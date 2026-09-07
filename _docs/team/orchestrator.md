@@ -34,7 +34,7 @@ How the client spawns that run (subagent, new session, copy-paste prompt, etc.) 
 |--------|--------|
 | Create handoff from template | `pending` |
 | Human sent correction notes after `pm_done` | set `pending`, re-run PM with those notes |
-| After Reviewer sets `approved` | set `ready_for_human`, stop, ping human |
+| After QA Engineer sets `approved` | set `ready_for_human`, stop, ping human |
 | After **2** `changes_requested` cycles | set `blocked`, stop, ping human — do **not** relaunch Software Engineer |
 
 You do **not** set `pm_done`, `dev_done`, `approved`, or `changes_requested`. You may set **Needs human review** to `no` when recording a human **approve** so the Dev gate is unambiguous.
@@ -63,7 +63,7 @@ You do **not** set `pm_done`, `dev_done`, `approved`, or `changes_requested`. Yo
 1. Read the handoff Status (and Review cycles).
 2. Enforce gates from [`_docs/process.md`](../process.md):
    - `pm_done` (human gate cleared or not required) or `changes_requested` → start **Software Engineer**
-   - `dev_done` → start **Reviewer**
+   - `dev_done` → start **QA Engineer**
    - `approved` → set `ready_for_human`, tell human the handoff path, **stop**
    - `changes_requested` and `Review cycles` ≥ 2 → set `blocked`, ping human, **stop**
    - `changes_requested` and `Review cycles` < 2 → start **Software Engineer** again
