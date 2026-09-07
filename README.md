@@ -24,7 +24,7 @@ Do not install Python, `uv`, or project deps on the host. Pick one path below.
 
 ### For developers (IDE + Dev Containers)
 
-Use an IDE with [Dev Containers](https://containers.dev/) support (Cursor or VS Code) and Docker (e.g. Docker Desktop).
+Use an IDE with [Dev Containers](https://containers.dev/) support and Docker (e.g. Docker Desktop).
 
 1. Open this folder in the editor.
 2. Reopen in Container. On first create, the container runs `uv sync` and applies migrations.

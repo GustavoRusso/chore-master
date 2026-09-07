@@ -17,7 +17,7 @@ A Django + HTMX family chore app: people assign tasks to each other, the receive
 - **Accounts:** real logins, one shared household.
 - **Stack:** [Django](https://www.djangoproject.com/) + HTMX, a little JS for drag-and-drop.
 - **Dev environment:** [Dev Containers](https://containers.dev/) — open the repo in a container; do not install Python, `uv`, or project deps on the host.
-- **Host prerequisites only:** Docker (e.g. Docker Desktop) + a Dev Containers–capable editor (Cursor/VS Code). Nothing else for the app stack.
+- **Host prerequisites only:** Docker (e.g. Docker Desktop) + a Dev Containers–capable editor. Nothing else for the app stack.
 - **Deps:** [`uv`](https://docs.astral.sh/uv/) inside the container (`pyproject.toml` + lockfile); no host `venv` / `pip`.
 
 
