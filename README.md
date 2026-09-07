@@ -16,22 +16,21 @@ A family chore planner built with Django and HTMX. Assign chores to each other, 
 - HTMX for inbox and mark-done interactions
 - Small JS for drag-and-drop scheduling
 - SQLite (dev) or Postgres
+- [uv](https://docs.astral.sh/uv/) for dependencies (inside the Dev Container)
 
 ## Setup
 
-```bash
-python -m venv .venv
-# Windows
-.venv\Scripts\activate
-# macOS / Linux
-source .venv/bin/activate
+**Host prerequisites:** Docker (e.g. Docker Desktop) and a Dev Containers–capable editor (Cursor or VS Code). Do not install Python, `uv`, or project deps on the host.
 
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py runserver
+1. Open this folder in the editor.
+2. Reopen in Container (Dev Containers). On first create, the container runs `uv sync` and applies migrations.
+3. Start the app:
+
+```bash
+uv run python manage.py runserver 0.0.0.0:8000
 ```
 
-Open http://127.0.0.1:8000/
+4. Open http://127.0.0.1:8000/
 
 ## MVP scope
 

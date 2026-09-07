@@ -1,0 +1,29 @@
+{
+  "name": "Chore Master",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "forwardPorts": [8000],
+  "portsAttributes": {
+    "8000": {
+      "label": "Django",
+      "onAutoForward": "notify"
+    }
+  },
+  "containerEnv": {
+    "UV_LINK_MODE": "copy"
+  },
+  "postCreateCommand": "uv sync && uv run python manage.py migrate",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "batisteo.vscode-django"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python"
+      }
+    }
+  }
+}
