@@ -31,7 +31,7 @@
 
 ## Evidence
 
-<!-- Architect-Developer: commands run + results before `dev_done` -->
+<!-- Software Engineer: commands run + results before `dev_done` -->
 
 ### Tests
 

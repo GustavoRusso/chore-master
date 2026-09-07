@@ -35,7 +35,7 @@ How the client spawns that run (subagent, new session, copy-paste prompt, etc.) 
 | Create handoff from template | `pending` |
 | Human sent correction notes after `pm_done` | set `pending`, re-run PM with those notes |
 | After Reviewer sets `approved` | set `ready_for_human`, stop, ping human |
-| After **2** `changes_requested` cycles | set `blocked`, stop, ping human — do **not** relaunch Architect-Developer |
+| After **2** `changes_requested` cycles | set `blocked`, stop, ping human — do **not** relaunch Software Engineer |
 
 You do **not** set `pm_done`, `dev_done`, `approved`, or `changes_requested`. You may set **Needs human review** to `no` when recording a human **approve** so the Dev gate is unambiguous.
 
@@ -54,19 +54,19 @@ You do **not** set `pm_done`, `dev_done`, `approved`, or `changes_requested`. Yo
 2. If `yes`:
    - Ping the human with the handoff path and backlog `#N`.
    - **Stop** until they reply in chat.
-   - **Approve** → optionally set **Needs human review** to `no`, then start **Architect-Developer**.
+   - **Approve** → optionally set **Needs human review** to `no`, then start **Software Engineer**.
    - **Corrections** → set Status to `pending`, start **PM** again with the human’s notes; when PM returns `pm_done`, pause again if **Needs human review** is `yes`.
-3. If `no`: start **Architect-Developer** immediately.
+3. If `no`: start **Software Engineer** immediately.
 
 ### After each later node
 
 1. Read the handoff Status (and Review cycles).
 2. Enforce gates from [`_docs/process.md`](../process.md):
-   - `pm_done` (human gate cleared or not required) or `changes_requested` → start **Architect-Developer**
+   - `pm_done` (human gate cleared or not required) or `changes_requested` → start **Software Engineer**
    - `dev_done` → start **Reviewer**
    - `approved` → set `ready_for_human`, tell human the handoff path, **stop**
    - `changes_requested` and `Review cycles` ≥ 2 → set `blocked`, ping human, **stop**
-   - `changes_requested` and `Review cycles` < 2 → start **Architect-Developer** again
+   - `changes_requested` and `Review cycles` < 2 → start **Software Engineer** again
    - `blocked` → stop (already terminal)
 
 ### Specialist runs
@@ -82,7 +82,7 @@ You do **not** set `pm_done`, `dev_done`, `approved`, or `changes_requested`. Yo
 - Grooming the backlog yourself — that is PM’s job
 - `git commit`, push, or opening PRs
 - Skipping PM when status is still `pending`
-- Starting Architect-Developer while **Needs human review** is `yes` before human approve
+- Starting Software Engineer while **Needs human review** is `yes` before human approve
 - Starting a third Dev pass after two `changes_requested` cycles
 - Moving this process into client-specific rule or agent folders (source of truth stays under `_docs/`)
 

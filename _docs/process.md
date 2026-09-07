@@ -8,14 +8,14 @@ Static multi-agent pipeline for Chore Master. Works with **any agentic client**:
 |------|----------|
 | Orchestrator | [`_docs/team/orchestrator.md`](team/orchestrator.md) |
 | Product Manager (PM) | [`_docs/team/pm.md`](team/pm.md) |
-| Architect-Developer-TDD | [`_docs/team/architect-developer.md`](team/architect-developer.md) |
+| Software Engineer | [`_docs/team/software-engineer.md`](team/software-engineer.md) |
 | Reviewer | [`_docs/team/reviewer.md`](team/reviewer.md) |
 
 ## Roles (summary)
 
 - **PM** — grooms a task before anyone implements it; follows [`_docs/team/pm.md`](team/pm.md). May run **standalone** (human: “Groom backlog #N”) or as the **first node** of an implementation run.
 - **Orchestrator** — creates the handoff, enforces gates, pauses for human when PM set **Needs human review: yes**.
-- **Architect-Developer-TDD** — implements from the groomed handoff with classic TDD.
+- **Software Engineer** — implements from the groomed handoff with classic TDD.
 - **Reviewer** — checks diff + Evidence against acceptance criteria.
 
 ## Grooming vs implementation
@@ -36,7 +36,7 @@ flowchart LR
   pm -->|Needs_human_review_yes| humanGate[Human_chat_approve]
   humanGate -->|approve| orchResume[Orchestrator]
   humanGate -->|corrections| pm
-  orchResume --> dev[ArchitectDeveloper_TDD]
+  orchResume --> dev[SoftwareEngineer]
   pm -->|Needs_human_review_no| dev
   dev --> rev[Reviewer]
   rev -->|approved| orch2[Orchestrator]
@@ -45,12 +45,12 @@ flowchart LR
   rev -->|2_cycles| blocked[blocked]
 ```
 
-**Default path:** Orchestrator → PM → (human gate if PM groomed this turn) → Architect-Developer-TDD → Reviewer → Orchestrator sets `ready_for_human` → human.
+**Default path:** Orchestrator → PM → (human gate if PM groomed this turn) → Software Engineer → Reviewer → Orchestrator sets `ready_for_human` → human.
 
 **Cycles:**
 
 - Human corrections after `pm_done` → Orchestrator re-runs **PM** with notes; pause again at `pm_done`.
-- Reviewer → Architect-Developer when status is `changes_requested`.
+- Reviewer → Software Engineer when status is `changes_requested`.
 
 **Cap:** After **2** `changes_requested` cycles (see `Review cycles`), Orchestrator sets `blocked` and pings the human. Do not start a third rework loop.
 
@@ -63,7 +63,7 @@ flowchart LR
 
    Use the current date (`YYYYMMDD`) and the human’s slug (lowercase, hyphenated).
 3. Status starts as `pending`.
-4. Orchestrator starts **PM**, then follows gates below. Do **not** start Architect-Developer while **Needs human review** is `yes` until the human approves in chat.
+4. Orchestrator starts **PM**, then follows gates below. Do **not** start Software Engineer while **Needs human review** is `yes` until the human approves in chat.
 
 ## How to groom only
 
@@ -106,9 +106,9 @@ Client adapters (how to spawn the run) are irrelevant to the graph: gates, statu
 | Status | Meaning |
 |--------|---------|
 | `pending` | Handoff created; PM not done |
-| `pm_done` | Four groomed sections filled; if **Needs human review** is `yes`, Orchestrator pauses until human says go in chat; if `no`, ready for Architect-Developer |
+| `pm_done` | Four groomed sections filled; if **Needs human review** is `yes`, Orchestrator pauses until human says go in chat; if `no`, ready for Software Engineer |
 | `dev_done` | Implementation + Evidence complete; ready for Reviewer |
-| `changes_requested` | Reviewer rejected; Architect-Developer must rework |
+| `changes_requested` | Reviewer rejected; Software Engineer must rework |
 | `approved` | Reviewer accepted; Orchestrator must finalize |
 | `blocked` | Stopped (e.g. 2 failed review cycles); human must intervene |
 | `ready_for_human` | Graph finished; human may commit/PR |
@@ -120,7 +120,7 @@ Client adapters (how to spawn the run) are irrelevant to the graph: gates, statu
 | (new file) | `pending` | Orchestrator |
 | `pending` | `pm_done` | PM |
 | `pm_done` → `pending` (re-groom) | Orchestrator (on human correction notes), then PM → `pm_done` again |
-| `pm_done` or `changes_requested` | `dev_done` | Architect-Developer |
+| `pm_done` or `changes_requested` | `dev_done` | Software Engineer |
 | `dev_done` | `approved` | Reviewer |
 | `dev_done` | `changes_requested` | Reviewer (also increments `Review cycles`) |
 | `approved` | `ready_for_human` | Orchestrator |
@@ -132,7 +132,7 @@ Client adapters (how to spawn the run) are irrelevant to the graph: gates, statu
 |-----------|-----------------|------------------|
 | PM | `pending` | Handoff file exists from template |
 | Human (chat) | `pm_done` and **Needs human review:** `yes` | Ping human with handoff path; wait for approve or correction notes |
-| Architect-Developer | `pm_done` with **Needs human review:** `no`, or `pm_done` after human approve, or `changes_requested` | Goal + Acceptance criteria + Out of scope + Constraints filled; **Backlog** set; if rework, Review explains what failed |
+| Software Engineer | `pm_done` with **Needs human review:** `no`, or `pm_done` after human approve, or `changes_requested` | Goal + Acceptance criteria + Out of scope + Constraints filled; **Backlog** set; if rework, Review explains what failed |
 | Reviewer | `dev_done` | Evidence includes full test run + migrate check |
 | Orchestrator finalize | `approved` | Review records approval |
 | Stop / ping human | `Review cycles` ≥ 2 after a new `changes_requested`, or explicit `blocked` | — |
@@ -141,18 +141,18 @@ Client adapters (how to spawn the run) are irrelevant to the graph: gates, statu
 
 - Status stays **`pm_done`** while paused (no separate status).
 - Human replies in **chat** (not by editing the handoff).
-- **Approve** → Orchestrator starts Architect-Developer (may set **Needs human review** to `no` when recording the go-ahead).
+- **Approve** → Orchestrator starts Software Engineer (may set **Needs human review** to `no` when recording the go-ahead).
 - **Corrections** → Orchestrator sets Status back to `pending`, re-runs PM with the notes; PM updates backlog + handoff, sets `pm_done` with **Needs human review: yes** again; Orchestrator pauses again.
 
 ### Review cycles
 
 - Field lives under **Status** in the handoff: `Review cycles: N` (starts at `0`).
 - Reviewer increments by **1** each time it sets `changes_requested`.
-- When Reviewer would request changes and `Review cycles` would become **greater than 2**, Orchestrator instead sets `blocked` and pings the human (do not launch a third Dev pass). Practical rule: after the **second** `changes_requested`, Orchestrator sets `blocked` and does not relaunch Architect-Developer.
+- When Reviewer would request changes and `Review cycles` would become **greater than 2**, Orchestrator instead sets `blocked` and pings the human (do not launch a third Dev pass). Practical rule: after the **second** `changes_requested`, Orchestrator sets `blocked` and does not relaunch Software Engineer.
 
-## Architect-Developer TDD (summary)
+## Software Engineer TDD (summary)
 
-Full rules: [`_docs/team/architect-developer.md`](team/architect-developer.md).
+Full rules: [`_docs/team/software-engineer.md`](team/software-engineer.md).
 
 - Classic **red → green → refactor**; no production behavior change without a failing test first.
 - Mandatory tests: Django model + view/HTMX tests via test client — **no** browser e2e for this process.
