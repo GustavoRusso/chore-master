@@ -16,14 +16,18 @@ A family chore planner built with Django and HTMX. Assign chores to each other, 
 - HTMX for inbox and mark-done interactions
 - Small JS for drag-and-drop scheduling
 - SQLite (dev) or Postgres
-- [uv](https://docs.astral.sh/uv/) for dependencies (inside the Dev Container)
+- [uv](https://docs.astral.sh/uv/) for dependencies (inside Docker / the Dev Container)
 
 ## Setup
 
-**Host prerequisites:** Docker (e.g. Docker Desktop) and a Dev Containers–capable editor (Cursor or VS Code). Do not install Python, `uv`, or project deps on the host.
+Do not install Python, `uv`, or project deps on the host. Pick one path below.
+
+### For developers (IDE + Dev Containers)
+
+Use an IDE with [Dev Containers](https://containers.dev/) support (Cursor or VS Code) and Docker (e.g. Docker Desktop).
 
 1. Open this folder in the editor.
-2. Reopen in Container (Dev Containers). On first create, the container runs `uv sync` and applies migrations.
+2. Reopen in Container. On first create, the container runs `uv sync` and applies migrations.
 3. Start the app:
 
 ```bash
@@ -31,6 +35,21 @@ uv run python manage.py runserver 0.0.0.0:8000
 ```
 
 4. Open http://127.0.0.1:8000/
+
+### Only run the project (Docker Desktop)
+
+Use [Docker Desktop](https://www.docker.com/products/docker-desktop/) (or another Docker engine) from a terminal — no Dev Containers IDE required. From the project root:
+
+```bash
+docker build -f .devcontainer/Dockerfile -t chore-master .
+docker run --rm -it -p 8000:8000 \
+  -e UV_LINK_MODE=copy \
+  -v "$PWD":/app -w /app \
+  chore-master \
+  bash -lc 'uv sync && uv run python manage.py migrate && uv run python manage.py runserver 0.0.0.0:8000'
+```
+
+Open http://127.0.0.1:8000/
 
 ## MVP scope
 
