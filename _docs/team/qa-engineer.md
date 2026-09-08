@@ -29,7 +29,7 @@ Treat the handoff as the issue: acceptance criteria live there. Ignore what the 
 | `dev_done` | `approved` | Leave `Review cycles` unchanged; Review starts with `## QA: PASS` |
 | `dev_done` | `changes_requested` | Set `Review cycles` to previous + 1; Review starts with `## QA: FAIL` |
 
-If incrementing would push past the process cap, still record the rejection in **Review**; Orchestrator is responsible for setting `blocked` when `Review cycles` reaches **2** and stopping further Dev runs. After your second `changes_requested` (`Review cycles: 2`), do not expect another Dev pass unless the human restarts.
+Always FAIL when criteria fail and increment **Review cycles**. Do **not** set `blocked` or `ready_for_human`. Orchestrator reads [`process.md`](../process.md) and chooses the next node.
 
 ## Procedure
 

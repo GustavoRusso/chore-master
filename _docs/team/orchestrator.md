@@ -35,7 +35,7 @@ How the client spawns that run (subagent, new session, copy-paste prompt, etc.) 
 | Create handoff from template | `pending` |
 | Human sent correction notes after `pm_done` | set `pending`, re-run PM with those notes |
 | After QA Engineer sets `approved` | set `ready_for_human`, stop, ping human |
-| After **2** `changes_requested` cycles | set `blocked`, stop, ping human — do **not** relaunch Software Engineer |
+| When [`process.md`](../process.md) **Stop / ping human** gate matches | set `blocked` if needed, stop, ping human — do **not** start the next specialist |
 
 You do **not** set `pm_done`, `dev_done`, `approved`, or `changes_requested`. You may set **Needs human review** to `no` when recording a human **approve** so the Dev gate is unambiguous.
 
@@ -60,14 +60,12 @@ You do **not** set `pm_done`, `dev_done`, `approved`, or `changes_requested`. Yo
 
 ### After each later node
 
-1. Read the handoff Status (and Review cycles).
-2. Enforce gates from [`_docs/process.md`](../process.md):
-   - `pm_done` (human gate cleared or not required) or `changes_requested` → start **Software Engineer**
-   - `dev_done` → start **QA Engineer**
-   - `approved` → set `ready_for_human`, tell human the handoff path, **stop**
-   - `changes_requested` and `Review cycles` ≥ 2 → set `blocked`, ping human, **stop**
-   - `changes_requested` and `Review cycles` < 2 → start **Software Engineer** again
-   - `blocked` → stop (already terminal)
+1. Read the handoff Status (and fields under Status).
+2. Enforce gates from [`_docs/process.md`](../process.md) — use that file’s gate table as the only rule source (including review-cycle stop). Check **Stop / ping human** before starting Software Engineer on `changes_requested`:
+   - Stop gate matches or Status is already `blocked` → set `blocked` if needed, ping human, **stop**
+   - Software Engineer gate matches → start **Software Engineer**
+   - QA Engineer gate matches → start **QA Engineer**
+   - Orchestrator finalize gate matches (`approved`) → set `ready_for_human`, tell human the handoff path, **stop**
 
 ### Specialist runs
 
@@ -83,7 +81,7 @@ You do **not** set `pm_done`, `dev_done`, `approved`, or `changes_requested`. Yo
 - `git commit`, push, or opening PRs
 - Skipping PM when status is still `pending`
 - Starting Software Engineer while **Needs human review** is `yes` before human approve
-- Starting a third Dev pass after two `changes_requested` cycles
+- Starting a specialist when the [`process.md`](../process.md) **Stop / ping human** gate matches (set `blocked` instead)
 - Moving this process into client-specific rule or agent folders (source of truth stays under `_docs/`)
 
 ## Done when

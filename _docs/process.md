@@ -60,7 +60,7 @@ flowchart LR
 - Human corrections after `pm_done` → Orchestrator re-runs **PM** with notes; pause again at `pm_done`.
 - QA Engineer → Software Engineer when status is `changes_requested`.
 
-**Cap:** After **2** `changes_requested` cycles (see `Review cycles`), Orchestrator sets `blocked` and pings the human. Do not start a third rework loop.
+**Cap:** Review-cycle stop limit is defined only under **Review cycles** below (not in role playbooks). Orchestrator enforces it via the **Stop / ping human** gate.
 
 ## How to start an implementation run
 
@@ -132,7 +132,7 @@ Client adapters (how to spawn the run) are irrelevant to the graph: gates, statu
 | `dev_done` | `approved` | QA Engineer |
 | `dev_done` | `changes_requested` | QA Engineer (also increments `Review cycles`) |
 | `approved` | `ready_for_human` | Orchestrator |
-| any (after 2 review cycles) | `blocked` | Orchestrator |
+| any (when `Review cycles` is `2` after `changes_requested`) | `blocked` | Orchestrator |
 
 ### Gates (Orchestrator enforces)
 
@@ -143,7 +143,7 @@ Client adapters (how to spawn the run) are irrelevant to the graph: gates, statu
 | Software Engineer | `pm_done` with **Needs human review:** `no`, or `pm_done` after human approve, or `changes_requested` | Goal + Acceptance criteria + Out of scope + Constraints filled; **Backlog** `#N` set and **post-groom** in [`backlog.md`](backlog.md); if rework, Review explains what failed |
 | QA Engineer | `dev_done` | Status `dev_done` (QA re-runs tests; Evidence may be incomplete) |
 | Orchestrator finalize | `approved` | Review records `## QA: PASS` |
-| Stop / ping human | `Review cycles` ≥ 2 after a new `changes_requested`, or explicit `blocked` | — |
+| Stop / ping human | `changes_requested` with `Review cycles: 2`, or explicit `blocked` | Orchestrator sets `blocked`; do not start Software Engineer |
 
 ### Human gate after PM
 
@@ -155,19 +155,12 @@ Client adapters (how to spawn the run) are irrelevant to the graph: gates, statu
 ### Review cycles
 
 - Field lives under **Status** in the handoff: `Review cycles: N` (starts at `0`).
-- QA Engineer increments by **1** each time it sets `changes_requested`.
-- When QA Engineer would request changes and `Review cycles` would become **greater than 2**, Orchestrator instead sets `blocked` and pings the human (do not launch a third Dev pass). Practical rule: after the **second** `changes_requested`, Orchestrator sets `blocked` and does not relaunch Software Engineer.
+- QA Engineer increments by **1** each time it sets `changes_requested`. QA does not apply the stop limit; it always records FAIL when criteria fail.
+- **Cap (defined only here):** After QA sets `changes_requested` and `Review cycles` becomes `2`, Orchestrator sets `blocked` and does **not** start another Software Engineer run. Orchestrator alone sets `blocked`. Do not restate this number in role playbooks.
 
-## Software Engineer TDD (summary)
+## Software Engineer
 
-Full rules: [`_docs/team/software-engineer.md`](team/software-engineer.md).
-
-- Classic **red → green → refactor**; no production behavior change without a failing test first.
-- Mandatory tests: Django model + view/HTMX tests via test client — **no** browser e2e for this process.
-- Stay inside handoff **Constraints** and **Out of scope**.
-- Before `dev_done`, paste into **Evidence**:
-  - Output of `uv run python manage.py test` (full suite, green)
-  - Migrate check (e.g. show migrations applied / no pending)
+Classic **red → green → refactor** TDD is required. Full rules, mandatory test depth, and **Evidence** commands live only in [`_docs/team/software-engineer.md`](team/software-engineer.md). Stay inside handoff **Constraints** and **Out of scope**.
 
 ## Exit
 
