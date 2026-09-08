@@ -12,3 +12,7 @@ This repo uses a **graph engineering** process for multi-agent work. It is **cli
 - **Product / scope locks:** [`_docs/plan.md`](_docs/plan.md), [`_docs/backlog.md`](_docs/backlog.md)
 
 Keep this process under `_docs/` (and this pointer file). Do **not** relocate it into client-specific rule or agent folders — the on-disk playbooks and handoffs are the source of truth for every client.
+
+## Git renames
+
+When you rename or move a tracked file, always use `git mv <old> <new>` (not a plain filesystem rename or delete+add). That keeps Git history linked to the new path. After `git mv`, update all references to the old path in the same change.
