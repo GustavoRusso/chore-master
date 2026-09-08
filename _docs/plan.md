@@ -14,7 +14,7 @@ A Django + HTMX family chore app: people assign tasks to each other, the receive
 - **Points:** finish a task → points. Extra points if it was assigned by someone else.
 - **Reward:** family **scoreboard**, weekly winner, **silly titles** (not spendable treats).
 - **Tone:** playful colors/stickers/sounds; **chore names stay normal** (“Unload dishwasher”).
-- **Accounts:** real logins, one shared household.
+- **Accounts:** real logins via **Google Sign-In**, one shared household. No username/password signup for MVP.
 - **Stack:** [Django](https://www.djangoproject.com/) + HTMX, a little JS for drag-and-drop.
 - **Dev environment:** [Dev Containers](https://containers.dev/) — open the repo in a container; do not install Python, `uv`, or project deps on the host.
 - **Host prerequisites only:** Docker (e.g. Docker Desktop) + a Dev Containers–capable editor. Nothing else for the app stack.
@@ -48,7 +48,7 @@ flowchart LR
 
 **Must have**
 
-- Sign up / log in (Django auth). Create or join a household (simple **invite code**).
+- Sign in with Google (Django session after OAuth). Create or join a household (simple **invite code**).
 - Switch nothing: you are always “yourself”; you see the household.
 - Create + assign tasks; inbox with accept / decline / send back.
 - Personal week board: 5 weekday columns + weekend overflow; drag S/M/L blocks.
@@ -61,7 +61,7 @@ flowchart LR
 - Random assignment / spinning wheel.
 - Spending points on real privileges.
 - Cartoon chore-monsters or announcer copy.
-- Native mobile apps, Google login, emails (unless Django needs a confirmation email you already know how to send).
+- Native mobile apps; username/password auth; emails (unless a library needs a confirmation email you already know how to send).
 - Chat, photos of completed work, recurring chore templates (nice later).
 
 
@@ -95,7 +95,7 @@ flowchart LR
 
 ## Progress
 
-Ordered build tasks and completion status live in [`backlog.md`](backlog.md). Do not track the same checklist here.
+Ordered build tasks and per-item **Status** live in [`backlog.md`](backlog.md). Do not track the same checklist here.
 
 ## What “done” looks like
 

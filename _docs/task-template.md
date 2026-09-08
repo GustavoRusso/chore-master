@@ -2,7 +2,20 @@
 
 **Post-groom** shape for a backlog item and for the matching sections in a handoff. PM fills every section before implementation.
 
-This is **not** the pre-groom stub shape. Pre-groom uses Goal, User can, Build, Depends on (see [`process.md`](process.md) — Backlog shapes). After grooming, replace those with the four sections below.
+Anything that does **not** meet this specification is **pre-groom** (not ready to implement). There is no separate pre-groom template.
+
+## Status
+
+Set on the backlog item when it meets this specification (or is shipped):
+
+| Value | Meaning |
+|-------|---------|
+| `post-groom` | Meets this specification; ready for an implementation run |
+| `done` | Shipped in the repo (keep the groomed body) |
+
+Omit **Status** (or leave the body incomplete) while the item is still pre-groom. Do **not** track grooming or delivery in a shared blurb at the top of [`backlog.md`](backlog.md).
+
+Handoffs copy the four sections below (not Status).
 
 ## Goal
 

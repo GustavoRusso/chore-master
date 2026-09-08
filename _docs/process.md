@@ -24,14 +24,20 @@ Static multi-agent pipeline for Chore Master. Works with **any agentic client**:
 
 ### Backlog shapes
 
-| Shape | When allowed | Sections |
-|-------|--------------|----------|
-| **Pre-groom** | Ungroomed ideas and ordered MVP stubs in [`_docs/backlog.md`](backlog.md) | Goal, User can, Build, Depends on |
-| **Post-groom** | Required after PM finishes (standalone or graph); required before Software Engineer | Goal, Acceptance criteria, Out of scope, Constraints — see [`_docs/task-template.md`](task-template.md) |
+The only defined backlog body is **post-groom** in [`task-template.md`](task-template.md). Anything that does not meet that specification is **pre-groom** (not ready to implement) — free-form notes are fine; there is no pre-groom template.
 
-- **Standalone:** Human asks the PM to groom. PM rewrites (or adds) a numbered item in [`_docs/backlog.md`](backlog.md) **in place** to **post-groom**. No handoff. Human reviews the backlog entry.
-- **Implementation graph:** Orchestrator creates a handoff, then PM runs first. If the backlog item is still **pre-groom** (or incomplete post-groom), PM grooms it to post-groom (and may add a new backlog item for ad-hoc work). PM copies the four post-groom sections into the handoff. Handoff always records **Backlog: #N**.
-- **Dev gate:** Do not start Software Engineer until the handoff four sections are filled **and** backlog `#N` is **post-groom** (groomed earlier, or groomed this turn).
+Each ready or shipped item in [`_docs/backlog.md`](backlog.md) has **Status** (`post-groom` | `done`). Do not keep a shared Progress/Grooming summary at the top of the backlog.
+
+| Status | When | Body |
+|--------|------|------|
+| *(none / incomplete)* | Ungroomed ideas and stubs | Not post-groom → treat as pre-groom |
+| `post-groom` | Required after PM finishes (standalone or graph); required before Software Engineer | Goal, Acceptance criteria, Out of scope, Constraints |
+| `done` | Work is in the repo | Same body as `post-groom` (keep the groomed text) |
+
+- **Standalone:** Human asks the PM to groom. PM rewrites (or adds) a numbered item in [`_docs/backlog.md`](backlog.md) **in place**, sets **Status:** `post-groom`, and fills the post-groom body. No handoff. Human reviews the backlog entry.
+- **Implementation graph:** Orchestrator creates a handoff, then PM runs first. If the backlog item is still pre-groom (missing Status or incomplete post-groom body), PM grooms it to `post-groom` (and may add a new backlog item for ad-hoc work). PM copies the four post-groom sections into the handoff. Handoff always records **Backlog: #N**.
+- **Dev gate:** Do not start Software Engineer until the handoff four sections are filled **and** backlog `#N` has **Status:** `post-groom` or `done` (groomed earlier, or groomed this turn).
+- **Mark done:** After the human lands the work in the repo, set that item’s **Status:** `done` (human, or next agent touch that updates the backlog).
 
 Catch misunderstandings while the issue is still a paragraph — correcting grooming is cheap; correcting after implementation is a rewrite.
 
@@ -81,7 +87,7 @@ Human copy-paste lines: [`human-start.md`](human-start.md).
 
 1. Human asks to groom (e.g. “Groom backlog #4” or describes new work).
 2. Agent follows [`_docs/team/product-manager.md`](team/product-manager.md) **standalone** mode — no Orchestrator handoff required.
-3. Human reviews the **post-groom** backlog entry. Later implementation runs can skip the human gate when PM only copies an already **post-groom** item (`Needs human review: no`).
+3. Human reviews the backlog entry (**Status:** `post-groom`). Later implementation runs can skip the human gate when PM only copies an already `post-groom` item (`Needs human review: no`).
 
 ## Fresh specialist
 
@@ -183,7 +189,7 @@ Client adapters stay irrelevant to the graph: gates, statuses, and handoff files
 |-----------|-----------------|------------------|
 | PM | `pending` | Handoff file exists from template |
 | Human (chat) | `pm_done` and **Needs human review:** `yes` | Ping human with handoff path; wait for approve or correction notes |
-| Software Engineer | `pm_done` with **Needs human review:** `no`, or `pm_done` after human approve, or `changes_requested` | Goal + Acceptance criteria + Out of scope + Constraints filled; **Backlog** `#N` set and **post-groom** in [`backlog.md`](backlog.md); if rework, Review explains what failed |
+| Software Engineer | `pm_done` with **Needs human review:** `no`, or `pm_done` after human approve, or `changes_requested` | Goal + Acceptance criteria + Out of scope + Constraints filled; **Backlog** `#N` set and backlog item **Status** is `post-groom` or `done` in [`backlog.md`](backlog.md); if rework, Review explains what failed |
 | QA Engineer | `dev_done` | Status `dev_done` (QA re-runs tests; Evidence may be incomplete) |
 | Orchestrator finalize | `approved` | Review records `## QA: PASS` |
 | Stop / ping human | `changes_requested` with `Review cycles: 2`, or explicit `blocked` | Orchestrator sets `blocked`; do not start Software Engineer |
@@ -208,7 +214,7 @@ Use this before each spawn or finalize. It is the **Gates** table as checks — 
 - [ ] Stop / ping human gate does **not** match
 - [ ] Status is `pm_done` with **Needs human review:** `no`, or `pm_done` after human approve, or `changes_requested`
 - [ ] Goal, Acceptance criteria, Out of scope, Constraints are filled
-- [ ] **Backlog** `#N` is set and that item is **post-groom** in `backlog.md`
+- [ ] **Backlog** `#N` is set and that item’s **Status** is `post-groom` or `done` in `backlog.md`
 - [ ] If `changes_requested`: Review explains what failed
 
 **Before QA Engineer**

@@ -14,7 +14,7 @@ Groom backlog #N
 Follow _docs/team/product-manager.md. Groom this idea into a post-groom backlog item: <description>
 ```
 
-Then review the **post-groom** item in [`backlog.md`](backlog.md) (Goal, Acceptance criteria, Out of scope, Constraints).
+Then review the backlog item in [`backlog.md`](backlog.md) (**Status:** `post-groom`, plus Goal, Acceptance criteria, Out of scope, Constraints).
 
 ## Start an implementation run
 
