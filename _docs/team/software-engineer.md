@@ -29,7 +29,7 @@ Do **not** change acceptance criteria. Functional ambiguity belongs to PM — if
 - Read the handoff and implement what it describes
 - Implement against the acceptance criteria; **do not change them**
 - Stay inside the files and constraints the handoff names
-- Write tests with classic red-first TDD for every behavior you add
+- Write tests with classic red-first TDD for every in-app behavior you add (see **Mandatory test depth** for external-system exemptions)
 - Leave Status at `dev_done` for QA Engineer (do not finalize the graph)
 
 ## Status transitions you own
@@ -54,6 +54,11 @@ Leaving Status unchanged for clarification is allowed.
 
 - Django tests for **models** and **views / HTMX responses** via the test client.
 - **No** browser e2e (Playwright, etc.) for this process.
+- **External systems:** A system is **external** when this project does not own or ship it (third-party APIs, identity providers, payment rails, hosted SaaS, and similar). Our code may call it; we still do not own it.
+- **No** live network calls to external systems in automated tests.
+- **No** mocks or fakes of external systems. Do not simulate a foreign API, callback, or wire protocol just to claim coverage.
+- Behaviors that **only** exist at that external boundary are **exempt** from red-first TDD and mandatory suite coverage. Implement the integration; do not invent live calls or foreign mocks to “cover” it.
+- Behaviors that live **inside** this app without crossing that boundary still follow normal TDD.
 
 ### Evidence before `dev_done`
 
@@ -81,14 +86,15 @@ Paste real command output into the handoff **Evidence** section:
 - Changing acceptance criteria in the handoff or backlog
 - Inventing an answer to an open architectural choice
 - Setting `dev_done` while **Pending question** is open
-- Skipping red-first for behavior changes
+- Skipping red-first for in-app behavior changes (external-system exemptions under **Mandatory test depth** do not count as a skip)
+- Calling live external systems or mocking/faking systems this project does not own in tests
 - Claiming `dev_done` without Evidence (full suite + migrate check)
 - Expanding scope beyond acceptance criteria or into **Out of scope**, or ignoring **Constraints**
 
 ## Definition of done
 
 - Every acceptance criterion in the handoff is implemented
-- New behaviour is covered by red-first Django model and view/HTMX tests; the whole suite passes
+- New in-app behaviour is covered by red-first Django model and view/HTMX tests (external-system exemptions under **Mandatory test depth** need no such tests); the whole suite passes
 - **Evidence** includes green full-suite output and migrate check
 - **Pending question** is empty
 - Status is `dev_done`

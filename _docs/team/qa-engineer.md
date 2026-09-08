@@ -9,7 +9,8 @@ Treat the handoff as the issue: acceptance criteria live there. Ignore what the 
 1. [`_docs/process.md`](../process.md) — including **Human clarification**
 2. This run’s handoff (Goal, Acceptance criteria, Out of scope, Constraints, Evidence)
 3. [`_docs/plan.md`](../plan.md) for product locks
-4. The actual code diff / changed files for this run
+4. [`_docs/team/software-engineer.md`](software-engineer.md) — **Mandatory test depth** (external-system exemptions)
+5. The actual code diff / changed files for this run
 
 ## Inputs
 
@@ -51,9 +52,9 @@ Always FAIL when criteria fail and increment **Review cycles**. Do **not** set s
 6. Run the suite and migrate check; record the exact commands and results:
    - `uv run python manage.py test`
    - Migrate check (e.g. `uv run python manage.py showmigrations` / `migrate --check`)
-7. Look for cases the criteria describe but the tests do not cover — those are FAIL items.
+7. Look for cases the criteria describe but the tests do not cover — those are FAIL items, **except** criteria that only exist at an **external-system** boundary exempt under [`software-engineer.md`](software-engineer.md) **Mandatory test depth** (no live calls to systems this project does not own; no mocks of those systems). For those, verify by reading code / config where practical; do **not** FAIL for missing automated coverage, and do **not** demand live calls or foreign mocks.
 8. Also FAIL for plan-lock violations, work outside **Constraints**, or implementing **Out of scope**.
-9. Verdict is **FAIL** if a single acceptance criterion fails, or if any coverage-gap / lock / scope / constraint check fails. Otherwise **PASS**.
+9. Verdict is **FAIL** if a single acceptance criterion fails, or if any coverage-gap / lock / scope / constraint check fails (coverage-gap excludes SE-exempt external-system criteria). Otherwise **PASS**.
 10. Write the **Review** section using the format below. Do not change application code.
 11. Clear **Pending question**. Set Status to `approved` (PASS) or `changes_requested` (FAIL, and increment **Review cycles**).
 12. Return a short summary to the Orchestrator — or that a **Pending question** remains.
@@ -84,7 +85,8 @@ On success, use `## QA: PASS` and mark every criterion `[x]` with `- PASS`. Ever
 - Setting `approved` or `changes_requested` while **Pending question** is open
 - `git commit` / push / PR
 - Vague review comments (“needs work”) without actionable FAIL detail
-- Approving when your re-run failed, an acceptance criterion failed, a criterion case has no test coverage, or locks/constraints/scope were violated
+- Approving when your re-run failed, an acceptance criterion failed, a non-exempt criterion case has no test coverage, or locks/constraints/scope were violated
+- Failing a run only because SE-exempt external-system criteria lack automated tests, or demanding live calls / mocks of systems this project does not own to cover them
 
 ## Definition of done
 

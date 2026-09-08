@@ -35,7 +35,7 @@ Each item that is ready or shipped has **Status** (`post-groom` | `done`) per [`
 - [ ] A logged-in user can log out and then cannot open a login-required page without signing in again
 - [ ] At least one simple logged-in home (or redirect target) is protected with `LoginRequiredMixin` / `@login_required`
 - [ ] Google OAuth client id and secret come from environment (or Dev Container env); they are not hard-coded in the repo
-- [ ] Automated tests cover login-required redirect, logout, and successful OAuth callback **without** calling live Google servers
+- [ ] Automated tests cover login-required redirect and logout (in-app only)
 
 ## Out of scope
 
@@ -44,6 +44,7 @@ Each item that is ready or shipped has **Status** (`post-groom` | `done`) per [`
 - Email confirmation and password-reset email flows
 - Protecting chore / household pages beyond the simple login-required home in this task
 - Linking multiple Google identities to one user, or account deletion / “disconnect Google”
+- Automated tests of the external identity-provider boundary (live calls or mocks of systems this project does not own) — see [`software-engineer.md`](team/software-engineer.md) **Mandatory test depth**
 
 ## Constraints
 
@@ -51,7 +52,7 @@ Each item that is ready or shipped has **Status** (`post-groom` | `done`) per [`
 - Use a maintained Django Google OAuth stack (prefer **django-allauth** with Google provider) and Django **session** auth after OAuth
 - Dev Container / local run must document the required env vars (e.g. in README or `.env.example`); secrets stay out of git
 - Honor [`plan.md`](plan.md): Google Sign-In only for MVP accounts; one shared household comes in #3
-- Tests: Django test client + mocked/faked OAuth callback; no browser e2e; no live Google API calls in CI
+- Tests: Django test client for in-app auth behavior only; no browser e2e; honor [`software-engineer.md`](team/software-engineer.md) **Mandatory test depth** (no live external systems; no mocks of systems this project does not own)
 
 ---
 
