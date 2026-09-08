@@ -21,6 +21,14 @@ Grooming fills gaps **before** coding so the human can correct a paragraph cheap
 
 Leave the backlog item **post-groom**. Do not stop while it is still pre-groom.
 
+## Backlog ↔ handoff sync
+
+Full rules: [`process.md`](../process.md) — **Backlog ↔ handoff sync**.
+
+- Groom / re-groom: edit **backlog first**, then copy the four sections into the handoff.
+- After `pm_done`, Dev/QA treat the **handoff** as authoritative if the two diverge.
+- Re-groom reconciles backlog to the agreed handoff (or applies human notes to both).
+
 ## Modes
 
 ### Standalone groom (human demand, no handoff)
@@ -44,7 +52,7 @@ Handoff exists at `pending`. You ensure the task is implementable without questi
    - If the work is ad-hoc and not in the backlog, **add a new numbered item**, groom it to **post-groom**, then use it.
 3. **Proof of post-groom:** the backlog entry already has Goal, Acceptance criteria, Out of scope, and Constraints from [`_docs/task-template.md`](../task-template.md) (criteria checkable; out-of-scope follow-ups linked). A **pre-groom** item (User can / Build / Depends on without those four) is **not** ready.
 4. If **not** ready: groom the backlog entry in place to **post-groom** (same rules as standalone), including follow-up backlog items for moved scope.
-5. Copy the four post-groom sections into the handoff. Set **Backlog:** `#N`.
+5. **Sync:** after the backlog item is post-groom, copy the four sections into the handoff (backlog first, then handoff). Set **Backlog:** `#N`.
 6. Set **Needs human review:**
    - `yes` — you groomed or re-groomed this turn (including after human correction notes), or you upgraded pre-groom → post-groom.
    - `no` — the backlog was already **post-groom** and complete enough to copy; no material rewrite.
@@ -56,7 +64,7 @@ Handoff exists at `pending`. You ensure the task is implementable without questi
 
 Orchestrator restarts you at `pending` (or with explicit notes) after the human rejected a clean approve.
 
-1. Apply the human’s notes to the **backlog** entry first (keep it **post-groom**), then refresh the handoff four sections.
+1. Apply the human’s notes to the **backlog** entry first (keep it **post-groom**), then refresh the handoff four sections so both match.
 2. Set **Needs human review:** `yes`.
 3. Set Status to `pm_done` again and summarize for Orchestrator.
 
@@ -75,6 +83,7 @@ Orchestrator restarts you at `pending` (or with explicit notes) after the human 
 - Inventing features that contradict [`_docs/plan.md`](../plan.md)
 - Silently dropping scope instead of filing a follow-up backlog item
 - Leaving the target backlog item **pre-groom** after your run
+- Updating only the handoff (or only the backlog) on groom/re-groom so the two diverge
 
 ## Definition of done
 

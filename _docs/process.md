@@ -123,6 +123,20 @@ Client adapters stay irrelevant to the graph: gates, statuses, and handoff files
 **Template:** [`_docs/handoffs/_template.md`](handoffs/_template.md)  
 **Groomed shape:** [`_docs/task-template.md`](task-template.md)
 
+### Lifecycle
+
+- **Create:** Orchestrator copies the template to `YYYYMMDD-<slug>.md` at run start (`pending`).
+- **Active run:** One implementation graph per handoff file. Do not reuse the same path for a second concurrent run.
+- **Multiple handoffs:** Allowed when paths differ (different date and/or slug).
+- **Retain:** After `ready_for_human` or `blocked`, leave the file in place. Do not delete it as part of the graph. Humans may archive later outside the process.
+- **Examples / template:** `_template.md` (and any `_example.md`) are not live runs — never set graph Status on them as if they were active handoffs.
+
+### Backlog ↔ handoff sync
+
+- **On groom / re-groom:** Update the backlog item **first**, then copy the four post-groom sections into the handoff. Set **Backlog: #N**.
+- **During Dev / QA:** The handoff is the issue of record. If backlog and handoff diverge mid-run, **handoff wins** for Software Engineer and QA Engineer.
+- **Reconcile:** A PM re-groom (or human correction via Orchestrator → PM) updates the backlog to match the agreed handoff (or applies human notes to both). Do not silently edit only one side after `pm_done` except through that path.
+
 ### Required sections
 
 1. **Status** (includes `Review cycles`, **Backlog**, **Needs human review**)
