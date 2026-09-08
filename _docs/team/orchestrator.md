@@ -18,10 +18,7 @@ Thin coordinator for the graph in [`_docs/process.md`](../process.md). You route
 ## Outputs
 
 - Handoff file created or status advanced (`ready_for_human` / `blocked`)
-- One fresh specialist run per next node, with:
-  - Playbook path (`_docs/team/<role>.md`)
-  - Handoff path
-  - Instruction to follow the playbook and update the handoff
+- One fresh specialist run per next node using the **Specialist invocation contract** in [`process.md`](../process.md)
 - Pause + ping when PM finished a groom that needs human review
 
 How the client spawns that run (subagent, new session, copy-paste prompt, etc.) does not change the graph.
@@ -46,32 +43,31 @@ You do **not** set `pm_done`, `dev_done`, `approved`, or `changes_requested`. Yo
 1. Confirm slug with the human (if missing, ask once).
 2. Copy [`_docs/handoffs/_template.md`](../handoffs/_template.md) → `_docs/handoffs/YYYYMMDD-<slug>.md` (today’s date).
 3. Ensure Status is `pending` and `Review cycles: 0`. Optionally note the backlog pointer in the start instructions for PM.
-4. Start a **PM** specialist run.
+4. Start a **PM** specialist run (fresh specialist + invocation contract in [`process.md`](../process.md)). Confirm **Before PM** checklist items are yes first.
 
 ### After PM (`pm_done`)
 
 1. Read **Needs human review** on the handoff.
 2. If `yes`:
+   - Confirm **Before Human (chat) pause** checklist in [`process.md`](../process.md).
    - Ping the human with the handoff path and backlog `#N`.
    - **Stop** until they reply in chat.
-   - **Approve** → optionally set **Needs human review** to `no`, then start **Software Engineer**.
+   - **Approve** → optionally set **Needs human review** to `no`, then run **Before Software Engineer** checklist and start **Software Engineer** via the invocation contract.
    - **Corrections** → set Status to `pending`, start **PM** again with the human’s notes; when PM returns `pm_done`, pause again if **Needs human review** is `yes`.
-3. If `no`: start **Software Engineer** immediately.
+3. If `no`: run **Before Software Engineer** checklist, then start **Software Engineer** via the invocation contract.
 
 ### After each later node
 
 1. Read the handoff Status (and fields under Status).
-2. Enforce gates from [`_docs/process.md`](../process.md) — use that file’s gate table as the only rule source (including review-cycle stop). Check **Stop / ping human** before starting Software Engineer on `changes_requested`:
-   - Stop gate matches or Status is already `blocked` → set `blocked` if needed, ping human, **stop**
-   - Software Engineer gate matches → start **Software Engineer**
-   - QA Engineer gate matches → start **QA Engineer**
-   - Orchestrator finalize gate matches (`approved`) → set `ready_for_human`, tell human the handoff path, **stop**
+2. Run the **Gate checklist** in [`process.md`](../process.md) — check **Stop / ping human** before Software Engineer on `changes_requested`. Start or finalize only when every box for that next node is yes.
+3. When starting a specialist, use the **Specialist invocation contract** in [`process.md`](../process.md) (fresh run; required inputs; expect required outputs).
 
 ### Specialist runs
 
-- Always use a **fresh** specialist run per node (isolate role context as far as the client allows).
-- Point it at the playbook + handoff path; tell it product locks live in `_docs/plan.md`.
+- Always a **fresh specialist** per node (definition in [`process.md`](../process.md)).
+- Provide playbook path + handoff path + disk-read instruction per the invocation contract.
 - Do not continue specialist work in the orchestrator turn.
+- After the run, confirm the handoff Status matches the summary before applying the next gate checklist.
 
 ## Forbidden
 

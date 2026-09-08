@@ -79,19 +79,43 @@ flowchart LR
 2. Agent follows [`_docs/team/product-manager.md`](team/product-manager.md) **standalone** mode — no Orchestrator handoff required.
 3. Human reviews the **post-groom** backlog entry. Later implementation runs can skip the human gate when PM only copies an already **post-groom** item (`Needs human review: no`).
 
+## Fresh specialist
+
+Each graph node is a **new specialist run** (subagent, separate session, or the client’s isolation equivalent):
+
+- Must re-read its playbook and this run’s handoff from disk at start.
+- Must not rely on prior role conversation, Orchestrator tool state, or another specialist’s memory.
+- Isolate role context as far as the client allows.
+
+## Specialist invocation contract
+
+How the client spawns the run is out of scope. Every specialist start must carry the same contract.
+
+**Required inputs (Orchestrator provides):**
+
+1. Playbook path (`_docs/team/<role>.md`)
+2. Handoff path (`_docs/handoffs/YYYYMMDD-<slug>.md`) — omit only for PM **standalone** groom
+3. Instruction: follow the playbook; read [`plan.md`](plan.md) / [`backlog.md`](backlog.md) from disk as needed; update only allowed handoff/backlog fields
+
+**Required outputs (specialist returns to Orchestrator):**
+
+1. Short summary of what it did
+2. Resulting Status (and **Needs human review** / **Review cycles** / **Backlog** when that role changes them)
+3. Which handoff or backlog sections it changed
+
+Orchestrator must not implement features. Specialists must not skip gates.
+
 ## Specialist run rule
 
-Each node run is a **fresh specialist agent** (isolated from prior role context as far as the client allows) that must:
+Each node run is a fresh specialist (see above) that must:
 
 1. Read its playbook under `_docs/team/`.
 2. Read the handoff file for this run (graph mode).
 3. Read [`_docs/plan.md`](plan.md) and [`_docs/backlog.md`](backlog.md) as needed — not from conversation memory alone.
 4. Update only the handoff / backlog sections and statuses it is allowed to change.
-5. Return a short summary to the Orchestrator when done.
+5. Return the invocation-contract outputs to the Orchestrator when done.
 
-Orchestrator must not implement features. Specialists must not skip gates.
-
-Client adapters (how to spawn the run) are irrelevant to the graph: gates, statuses, and handoff files stay the same everywhere.
+Client adapters stay irrelevant to the graph: gates, statuses, and handoff files stay the same everywhere.
 
 ## Handoff file
 
@@ -144,6 +168,43 @@ Client adapters (how to spawn the run) are irrelevant to the graph: gates, statu
 | QA Engineer | `dev_done` | Status `dev_done` (QA re-runs tests; Evidence may be incomplete) |
 | Orchestrator finalize | `approved` | Review records `## QA: PASS` |
 | Stop / ping human | `changes_requested` with `Review cycles: 2`, or explicit `blocked` | Orchestrator sets `blocked`; do not start Software Engineer |
+
+### Gate checklist (yes/no)
+
+Use this before each spawn or finalize. It is the **Gates** table as checks — do not invent extra rules.
+
+**Before PM**
+
+- [ ] Status is `pending`
+- [ ] Handoff file exists (from template)
+
+**Before Human (chat) pause**
+
+- [ ] Status is `pm_done`
+- [ ] **Needs human review** is `yes`
+- [ ] Human has been pinged with handoff path (and backlog `#N` when set)
+
+**Before Software Engineer**
+
+- [ ] Stop / ping human gate does **not** match
+- [ ] Status is `pm_done` with **Needs human review:** `no`, or `pm_done` after human approve, or `changes_requested`
+- [ ] Goal, Acceptance criteria, Out of scope, Constraints are filled
+- [ ] **Backlog** `#N` is set and that item is **post-groom** in `backlog.md`
+- [ ] If `changes_requested`: Review explains what failed
+
+**Before QA Engineer**
+
+- [ ] Status is `dev_done`
+
+**Before Orchestrator finalize**
+
+- [ ] Status is `approved`
+- [ ] Review starts with `## QA: PASS`
+
+**Before Stop / ping human**
+
+- [ ] `changes_requested` with `Review cycles: 2`, or Status is already `blocked` / must become `blocked`
+- [ ] Do **not** start Software Engineer; set `blocked` if needed; ping human
 
 ### Human gate after PM
 
