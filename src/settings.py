@@ -141,12 +141,17 @@ SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
 SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 
+def _env(name: str, default: str = "") -> str:
+    """Read an env var and strip whitespace / CR (Windows .env line endings)."""
+    return os.environ.get(name, default).strip()
+
+
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "APPS": [
             {
-                "client_id": os.environ.get("GOOGLE_CLIENT_ID", ""),
-                "secret": os.environ.get("GOOGLE_CLIENT_SECRET", ""),
+                "client_id": _env("GOOGLE_CLIENT_ID"),
+                "secret": _env("GOOGLE_CLIENT_SECRET"),
                 "key": "",
             }
         ],

@@ -28,30 +28,30 @@ Use an IDE with [Dev Containers](https://containers.dev/) support and Docker (e.
 
 1. Open this folder in the editor.
 2. Reopen in Container. On first create, the container runs `uv sync` and applies migrations.
-3. Copy `.env.example` to `.env` (gitignored) and set Google OAuth values (see **Auth env vars** below).
-4. Load env vars and start the app:
+3. Copy `.env.example` to `.env` (gitignored):
+
+```bash
+cp .env.example .env
+```
+
+4. Create your own Google OAuth Web client and put the values in `.env` — step-by-step: [`_docs/google-oauth-local-setup.md`](_docs/google-oauth-local-setup.md).
+5. Load env vars and start the app:
 
 ```bash
 set -a && source .env && set +a
 uv run python manage.py runserver 0.0.0.0:8000
 ```
 
-5. Open http://127.0.0.1:8000/
+6. Open http://127.0.0.1:8000/
 
 ### Auth env vars
-
-Google Sign-In needs an OAuth 2.0 Web client from [Google Cloud Console](https://console.cloud.google.com/). Put the values in `.env` (never commit secrets):
 
 | Variable | Purpose |
 |----------|---------|
 | `GOOGLE_CLIENT_ID` | OAuth client ID |
 | `GOOGLE_CLIENT_SECRET` | OAuth client secret |
 
-Authorized redirect URI for local/dev:
-
-```text
-http://127.0.0.1:8000/accounts/google/login/callback/
-```
+How to create the client and the local redirect URI: [`_docs/google-oauth-local-setup.md`](_docs/google-oauth-local-setup.md).
 
 ### Only run the project (Docker Desktop)
 
