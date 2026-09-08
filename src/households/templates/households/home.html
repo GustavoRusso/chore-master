@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ household.name }} — Chore Master</title>
+  </head>
+  <body>
+    <h1>{{ household.name }}</h1>
+    <p>Invite code: {{ household.invite_code }}</p>
+    <h2>Members</h2>
+    <ul>
+      {% for member in members %}
+        <li>{{ member.get_short_name|default:member.username }}</li>
+      {% endfor %}
+    </ul>
+    <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button type="submit">Log out</button>
+    </form>
+  </body>
+</html>

@@ -22,7 +22,7 @@ Each item that is ready or shipped has **Status** (`post-groom` | `done`) per [`
 
 ## 2. Accounts
 
-**Status:** `post-groom`
+**Status:** `done`
 
 **Goal:** Family members sign in with Google so every later action is tied to a real user account (themselves).
 
@@ -58,7 +58,7 @@ Each item that is ready or shipped has **Status** (`post-groom` | `done`) per [`
 
 ## 3. Create household
 
-**Status:** `post-groom`
+**Status:** `done`
 
 **Goal:** A signed-in family member with no household can create one (name + generated invite code), become a member, and see the household home. They are always themselves.
 
