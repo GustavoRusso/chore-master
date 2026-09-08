@@ -7,13 +7,13 @@ Static multi-agent pipeline for Chore Master. Works with **any agentic client**:
 | Role | Playbook |
 |------|----------|
 | Orchestrator | [`_docs/team/orchestrator.md`](team/orchestrator.md) |
-| Product Manager (PM) | [`_docs/team/pm.md`](team/pm.md) |
+| Product Manager (PM) | [`_docs/team/product-manager.md`](team/product-manager.md) |
 | Software Engineer | [`_docs/team/software-engineer.md`](team/software-engineer.md) |
 | QA Engineer | [`_docs/team/qa-engineer.md`](team/qa-engineer.md) |
 
 ## Roles (summary)
 
-- **PM** — grooms a task before anyone implements it; follows [`_docs/team/pm.md`](team/pm.md). May run **standalone** (human: “Groom backlog #N”) or as the **first node** of an implementation run.
+- **PM** — grooms a task before anyone implements it; follows [`_docs/team/product-manager.md`](team/product-manager.md). May run **standalone** (human: “Groom backlog #N”) or as the **first node** of an implementation run.
 - **Orchestrator** — creates the handoff, enforces gates, pauses for human when PM set **Needs human review: yes**.
 - **Software Engineer** — implements from the groomed handoff with classic TDD.
 - **QA Engineer** — checks finished work against acceptance criteria (and locks/scope); writes PASS/FAIL in **Review**.
@@ -68,7 +68,7 @@ flowchart LR
 ## How to groom only
 
 1. Human asks to groom (e.g. “Groom backlog #4” or describes new work).
-2. Agent follows [`_docs/team/pm.md`](team/pm.md) **standalone** mode — no Orchestrator handoff required.
+2. Agent follows [`_docs/team/product-manager.md`](team/product-manager.md) **standalone** mode — no Orchestrator handoff required.
 3. Human reviews the backlog entry. Later implementation runs can skip the human gate when PM only copies an already-complete item (`Needs human review: no`).
 
 ## Specialist run rule

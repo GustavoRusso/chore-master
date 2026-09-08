@@ -26,7 +26,7 @@ Thin coordinator for the graph in [`_docs/process.md`](../process.md). You route
 
 How the client spawns that run (subagent, new session, copy-paste prompt, etc.) does not change the graph.
 
-**Standalone grooming** (“Groom backlog #N”) is **not** your job — point the human (or a PM session) at [`_docs/team/pm.md`](pm.md); no handoff required.
+**Standalone grooming** (“Groom backlog #N”) is **not** your job — point the human (or a PM session) at [`_docs/team/product-manager.md`](product-manager.md); no handoff required.
 
 ## Status transitions you own
 
