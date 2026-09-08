@@ -32,7 +32,7 @@ Household members can sign up, log in, and log out with Django auth so every lat
 
 ## Constraints
 
-- Stay inside Django auth views/templates (or thin wrappers) under the existing `chore_master` project
+- Stay inside Django auth views/templates (or thin wrappers) under the existing Django project in `src/`
 - Use session auth from Django; no new auth libraries
 - Honor [`plan.md`](../plan.md): real logins, one shared household later — this task is accounts only
 - Tests: Django test client for views; no browser e2e

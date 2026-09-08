@@ -1,9 +1,9 @@
-"""WSGI config for chore_master project."""
+"""WSGI config for the Chore Master project."""
 
 import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "chore_master.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "src.settings")
 
 application = get_wsgi_application()

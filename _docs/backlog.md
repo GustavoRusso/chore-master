@@ -14,7 +14,7 @@ Each item that is ready or shipped has **Status** (`post-groom` | `done`) per [`
 
 **User can:** Open the folder in a Dev Container, run `uv run python manage.py runserver 0.0.0.0:8000`, hit the app (admin at `/admin/`).
 
-**Build:** `.devcontainer/` (Python + `uv`), `pyproject.toml` + lockfile, Django project `chore_master`, SQLite, port 8000, `postCreateCommand` sync + migrate.
+**Build:** `.devcontainer/` (Python + `uv`), `pyproject.toml` + lockfile, Django project under `src/`, SQLite, port 8000, `postCreateCommand` sync + migrate.
 
 **Depends on:** nothing.
 
@@ -48,7 +48,7 @@ Each item that is ready or shipped has **Status** (`post-groom` | `done`) per [`
 
 ## Constraints
 
-- Stay inside the existing `chore_master` Django project; add a small `accounts` app (or equivalent) for views/templates/urls
+- Stay inside the existing Django project under `src/`; add a small `accounts` app (or equivalent) for views/templates/urls
 - Use a maintained Django Google OAuth stack (prefer **django-allauth** with Google provider) and Django **session** auth after OAuth
 - Dev Container / local run must document the required env vars (e.g. in README or `.env.example`); secrets stay out of git
 - Honor [`plan.md`](plan.md): Google Sign-In only for MVP accounts; one shared household comes in #3

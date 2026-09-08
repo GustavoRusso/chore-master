@@ -1,5 +1,5 @@
 """
-Django settings for chore_master project.
+Django settings for the Chore Master project.
 
 Generated for the Chore Master DevContainer bootstrap.
 """
@@ -43,7 +43,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "chore_master.urls"
+ROOT_URLCONF = "src.urls"
 
 TEMPLATES = [
     {
@@ -60,7 +60,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "chore_master.wsgi.application"
+WSGI_APPLICATION = "src.wsgi.application"
 
 
 # Database

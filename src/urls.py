@@ -1,4 +1,4 @@
-"""URL configuration for chore_master project."""
+"""URL configuration for the Chore Master project."""
 
 from django.contrib import admin
 from django.urls import path
