@@ -58,14 +58,42 @@ Each item that is ready or shipped has **Status** (`post-groom` | `done`) per [`
 
 ## 3. Household + invite code
 
+**Status:** `post-groom`
 
-**Goal:** One shared household per family.
+**Goal:** A signed-in family member belongs to one shared household: they create it (name + invite code) or join with a code, then see the members. They are always themselves.
 
-**User can:** Create a household (get an invite code) or join with a code; see who is in the household.
+## Acceptance criteria
 
-**Build:** `Household` + membership models; create/join flows; simple household home listing members. User is always themselves — no “switch person.”
+- [ ] A logged-in user with **no** household sees create-household (including a name field) and join-with-code, and does **not** see a household member list
+- [ ] Creating a household with a name adds the creator as a member, generates an invite code, and opens the household home
+- [ ] The household home shows the household name, the invite code, and every member (each as themselves — no “switch person”)
+- [ ] A logged-in user with no household can join with a **valid** invite code and then sees that household’s name, invite code, and member list (including themselves)
+- [ ] After create or join, the user does **not** stay on the empty signed-in home from #2
+- [ ] A wrong, unknown, or empty invite code does not add the user to a household and shows a visible error; they still see create/join
+- [ ] Submitting create with an empty name does not create a household and shows a visible error; they still have no household
+- [ ] A user who **already** belongs to a household sees that household home and is not offered create/join as the main path
+- [ ] A user who already belongs cannot create a second household or join another (they stay in the original household)
+- [ ] An anonymous visitor cannot open create, join, or the household home; they are sent to login
+- [ ] Automated tests cover create, join success, join failure, already-a-member, and login-required redirect (in-app only)
 
-**Depends on:** 2.
+## Out of scope
+
+- Assign chores — backlog #4
+- Inbox actions, week board, complete + points, scoreboard, playful polish — backlog #5–#9
+- Leave household, remove a member, rename a household, or regenerate the invite code
+- More than one household per user; household owner/admin roles
+- Sending the invite code by email (MVP has no email invites per [`plan.md`](plan.md))
+- Changing Google Sign-In from #2
+- Automated tests of live email or other external systems — see [`software-engineer.md`](team/software-engineer.md) **Mandatory test depth**
+
+## Constraints
+
+- Depends on #2 (Google session auth and the login-required home). Stay inside the existing Django project under `src/`; add a small `households` app (or equivalent) for models/views/templates/urls
+- Replace the empty signed-in home from #2 with this task’s create/join gate and household home (do not leave a separate dead “you are signed in” page as the post-login landing)
+- Models: `Household` (name + unique invite code) and membership (user belongs to at most one household). The app generates the invite code; the family does not invent it. Join is by invite code, not by household name
+- Honor [`plan.md`](plan.md): one shared household; no “switch person”; simple invite code; no username/password path
+- Server-rendered Django templates and form posts are enough (HTMX is for later inbox / mark-done work)
+- Tests: Django test client for in-app create/join/membership behavior only; no browser e2e; honor [`software-engineer.md`](team/software-engineer.md) **Mandatory test depth** (no live external systems; no mocks of systems this project does not own)
 
 ---
 
