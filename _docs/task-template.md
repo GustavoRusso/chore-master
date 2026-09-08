@@ -1,6 +1,8 @@
 # Task template
 
-Shape for a groomed backlog item and for the matching sections in a handoff. PM fills every section before implementation.
+**Post-groom** shape for a backlog item and for the matching sections in a handoff. PM fills every section before implementation.
+
+This is **not** the pre-groom stub shape. Pre-groom uses Goal, User can, Build, Depends on (see [`process.md`](process.md) — Backlog shapes). After grooming, replace those with the four sections below.
 
 ## Goal
 

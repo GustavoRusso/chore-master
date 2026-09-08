@@ -20,10 +20,18 @@ Static multi-agent pipeline for Chore Master. Works with **any agentic client**:
 
 ## Grooming vs implementation
 
-**Grooming** makes a backlog item precise enough that an engineer who never spoke to the PM could implement it. Shape: [`_docs/task-template.md`](task-template.md) — Goal, Acceptance criteria, Out of scope, Constraints.
+**Grooming** makes a backlog item precise enough that an engineer who never spoke to the PM could implement it.
 
-- **Standalone:** Human asks the PM to groom. PM rewrites (or adds) a numbered item in [`_docs/backlog.md`](backlog.md) **in place**. No handoff. Human reviews the backlog entry.
-- **Implementation graph:** Orchestrator creates a handoff, then PM runs first. PM checks that the backlog item already has enough detail to fill the handoff; if not, PM grooms it (and may add a new backlog item for ad-hoc work). Handoff always records **Backlog: #N**.
+### Backlog shapes
+
+| Shape | When allowed | Sections |
+|-------|--------------|----------|
+| **Pre-groom** | Ungroomed ideas and ordered MVP stubs in [`_docs/backlog.md`](backlog.md) | Goal, User can, Build, Depends on |
+| **Post-groom** | Required after PM finishes (standalone or graph); required before Software Engineer | Goal, Acceptance criteria, Out of scope, Constraints — see [`_docs/task-template.md`](task-template.md) |
+
+- **Standalone:** Human asks the PM to groom. PM rewrites (or adds) a numbered item in [`_docs/backlog.md`](backlog.md) **in place** to **post-groom**. No handoff. Human reviews the backlog entry.
+- **Implementation graph:** Orchestrator creates a handoff, then PM runs first. If the backlog item is still **pre-groom** (or incomplete post-groom), PM grooms it to post-groom (and may add a new backlog item for ad-hoc work). PM copies the four post-groom sections into the handoff. Handoff always records **Backlog: #N**.
+- **Dev gate:** Do not start Software Engineer until the handoff four sections are filled **and** backlog `#N` is **post-groom** (groomed earlier, or groomed this turn).
 
 Catch misunderstandings while the issue is still a paragraph — correcting grooming is cheap; correcting after implementation is a rewrite.
 
@@ -69,7 +77,7 @@ flowchart LR
 
 1. Human asks to groom (e.g. “Groom backlog #4” or describes new work).
 2. Agent follows [`_docs/team/product-manager.md`](team/product-manager.md) **standalone** mode — no Orchestrator handoff required.
-3. Human reviews the backlog entry. Later implementation runs can skip the human gate when PM only copies an already-complete item (`Needs human review: no`).
+3. Human reviews the **post-groom** backlog entry. Later implementation runs can skip the human gate when PM only copies an already **post-groom** item (`Needs human review: no`).
 
 ## Specialist run rule
 
@@ -132,7 +140,7 @@ Client adapters (how to spawn the run) are irrelevant to the graph: gates, statu
 |-----------|-----------------|------------------|
 | PM | `pending` | Handoff file exists from template |
 | Human (chat) | `pm_done` and **Needs human review:** `yes` | Ping human with handoff path; wait for approve or correction notes |
-| Software Engineer | `pm_done` with **Needs human review:** `no`, or `pm_done` after human approve, or `changes_requested` | Goal + Acceptance criteria + Out of scope + Constraints filled; **Backlog** set; if rework, Review explains what failed |
+| Software Engineer | `pm_done` with **Needs human review:** `no`, or `pm_done` after human approve, or `changes_requested` | Goal + Acceptance criteria + Out of scope + Constraints filled; **Backlog** `#N` set and **post-groom** in [`backlog.md`](backlog.md); if rework, Review explains what failed |
 | QA Engineer | `dev_done` | Status `dev_done` (QA re-runs tests; Evidence may be incomplete) |
 | Orchestrator finalize | `approved` | Review records `## QA: PASS` |
 | Stop / ping human | `Review cycles` ≥ 2 after a new `changes_requested`, or explicit `blocked` | — |

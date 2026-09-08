@@ -4,6 +4,8 @@ Ordered tasks for building the Django + HTMX app from [`plan.md`](plan.md). Each
 
 **Progress:** task 1 is done in the repo today. Next up is accounts.
 
+**Grooming:** Items may be **pre-groom** (Goal, User can, Build, Depends on) until a PM run. Items **#2–#9** below are still pre-groom. Implementation needs **post-groom** (Goal, Acceptance criteria, Out of scope, Constraints) — see [`task-template.md`](task-template.md) and [`process.md`](process.md).
+
 ---
 
 ## 1. Project bootstrap — Done
