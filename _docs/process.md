@@ -14,9 +14,42 @@ Static multi-agent pipeline for Chore Master. Works with **any agentic client**:
 ## Roles (summary)
 
 - **PM** — grooms a task before anyone implements it; follows [`_docs/team/product-manager.md`](team/product-manager.md). May run **standalone** (human: “Groom backlog #N”) or as the **first node** of an implementation run.
-- **Orchestrator** — creates the handoff, enforces gates, pauses for human when PM set **Needs human review: yes**.
+- **Orchestrator** — creates the handoff, enforces gates, pauses for human on **Pending question** (any specialist) or when PM set **Needs human review: yes**.
 - **Software Engineer** — implements from the groomed handoff with classic TDD.
 - **QA Engineer** — checks finished work against acceptance criteria (and locks/scope); writes PASS/FAIL in **Review**.
+
+## Human clarification (all specialists)
+
+No specialist invents an open decision in its domain. The human decides. The specialist that needs the answer asks; the Orchestrator only relays.
+
+**Shared pause (any node):**
+
+1. Write **Pending question** on the handoff: first line `From: <role>`, then **one** question + suggested options.
+2. Do **not** invent a default. Do **not** advance your Status transition.
+3. Return to the Orchestrator. Orchestrator pings the human, waits for one answer, re-runs the role named in `From:`.
+4. Clear **Pending question** when you continue after the answer.
+
+Ask **exactly one** question per pause. Suggested shape:
+
+```text
+From: Product Manager
+
+Question: <one sentence>
+
+A) <option>
+B) <option>
+C) <option>
+
+Reply with the option letter or your own answer.
+```
+
+Use the matching role name: `Product Manager`, `Software Engineer`, or `QA Engineer`.
+
+Each playbook names only the **kind** of decision that role owns (for example functional vs architectural). This process does **not** list when to ask — the specialist judges that from its playbook and the work in front of it.
+
+Locked text in [`plan.md`](plan.md) and settled handoff text are not new decisions unless they conflict or the human re-opens them.
+
+**Separate from clarification:** after a material PM groom, **Needs human review: yes** is a full-item sign-off (`pm_done`), not a single clarifying question.
 
 ## Grooming vs implementation
 
@@ -34,8 +67,8 @@ Each ready or shipped item in [`_docs/backlog.md`](backlog.md) has **Status** (`
 | `post-groom` | Required after PM finishes (standalone or graph); required before Software Engineer | Goal, Acceptance criteria, Out of scope, Constraints |
 | `done` | Work is in the repo | Same body as `post-groom` (keep the groomed text) |
 
-- **Standalone:** Human asks the PM to groom. PM rewrites (or adds) a numbered item in [`_docs/backlog.md`](backlog.md) **in place**, sets **Status:** `post-groom`, and fills the post-groom body. No handoff. Human reviews the backlog entry.
-- **Implementation graph:** Orchestrator creates a handoff, then PM runs first. If the backlog item is still pre-groom (missing Status or incomplete post-groom body), PM grooms it to `post-groom` (and may add a new backlog item for ad-hoc work). PM copies the four post-groom sections into the handoff. Handoff always records **Backlog: #N**.
+- **Standalone:** Human asks the PM to groom. PM uses **Human clarification** for open functional choices, then rewrites (or adds) a numbered item in [`_docs/backlog.md`](backlog.md) **in place**, sets **Status:** `post-groom`, and fills the post-groom body. No handoff. Human reviews the backlog entry.
+- **Implementation graph:** Orchestrator creates a handoff, then PM runs first. If clarification is needed, PM leaves Status `pending` with **Pending question**; Orchestrator pings the human and re-runs PM. When ready, PM grooms pre-groom items to `post-groom` (and may add a new backlog item for ad-hoc work). PM copies the four post-groom sections into the handoff. Handoff always records **Backlog: #N**.
 - **Dev gate:** Do not start Software Engineer until the handoff four sections are filled **and** backlog `#N` has **Status:** `post-groom` or `done` (groomed earlier, or groomed this turn).
 - **Mark done:** After the human lands the work in the repo, set that item’s **Status:** `done` (human, or next agent touch that updates the backlog).
 
@@ -47,22 +80,30 @@ Catch misunderstandings while the issue is still a paragraph — correcting groo
 flowchart LR
   human[Human_start] --> orch[Orchestrator]
   orch --> pm[PM]
+  pm -->|Pending_question| clarify[Human_chat_answer]
+  clarify --> sameRole[Same_specialist]
+  sameRole --> pm
+  sameRole --> dev
+  sameRole --> rev
   pm -->|Needs_human_review_yes| humanGate[Human_chat_approve]
   humanGate -->|approve| orchResume[Orchestrator]
   humanGate -->|corrections| pm
   orchResume --> dev[SoftwareEngineer]
   pm -->|Needs_human_review_no| dev
+  dev -->|Pending_question| clarify
   dev --> rev[QAEngineer]
+  rev -->|Pending_question| clarify
   rev -->|approved| orch2[Orchestrator]
   orch2 --> ready[ready_for_human]
   rev -->|changes_requested| dev
   rev -->|2_cycles| blocked[blocked]
 ```
 
-**Default path:** Orchestrator → PM → (human gate if PM groomed this turn) → Software Engineer → QA Engineer → Orchestrator sets `ready_for_human` → human.
+**Default path:** Orchestrator → PM → (clarification answers if needed) → (human gate if PM groomed this turn) → Software Engineer → QA Engineer → Orchestrator sets `ready_for_human` → human.
 
 **Cycles:**
 
+- Clarification: human answers one **Pending question** → Orchestrator re-runs the role in that field’s `From:` line; Status stays where that role left it until the role finishes or asks again.
 - Human corrections after `pm_done` → Orchestrator re-runs **PM** with notes; pause again at `pm_done`.
 - QA Engineer → Software Engineer when status is `changes_requested`.
 
@@ -79,7 +120,7 @@ Human copy-paste lines: [`human-start.md`](human-start.md).
 
    Use the current date (`YYYYMMDD`) and the human’s slug (lowercase, hyphenated).
 3. Status starts as `pending`.
-4. Orchestrator starts **PM**, then follows gates below. Do **not** start Software Engineer while **Needs human review** is `yes` until the human approves in chat.
+4. Orchestrator starts **PM**, then follows gates below. Do **not** advance past a specialist while **Pending question** is set, or start Software Engineer while **Needs human review** is `yes`, until the human answers or approves in chat.
 
 ## How to groom only
 
@@ -87,7 +128,8 @@ Human copy-paste lines: [`human-start.md`](human-start.md).
 
 1. Human asks to groom (e.g. “Groom backlog #4” or describes new work).
 2. Agent follows [`_docs/team/product-manager.md`](team/product-manager.md) **standalone** mode — no Orchestrator handoff required.
-3. Human reviews the backlog entry (**Status:** `post-groom`). Later implementation runs can skip the human gate when PM only copies an already `post-groom` item (`Needs human review: no`).
+3. PM uses **Human clarification** until open functional choices are settled; then writes **Status:** `post-groom`.
+4. Human reviews the backlog entry (**Status:** `post-groom`). Later implementation runs can skip the human gate when PM only copies an already `post-groom` item (`Needs human review: no`).
 
 ## Fresh specialist
 
@@ -150,7 +192,7 @@ Client adapters stay irrelevant to the graph: gates, statuses, and handoff files
 
 ### Required sections
 
-1. **Status** (includes `Review cycles`, **Backlog**, **Needs human review**)
+1. **Status** (includes `Review cycles`, **Backlog**, **Needs human review**, **Pending question**)
 2. **Goal**
 3. **Acceptance criteria**
 4. **Out of scope**
@@ -162,10 +204,10 @@ Client adapters stay irrelevant to the graph: gates, statuses, and handoff files
 
 | Status | Meaning |
 |--------|---------|
-| `pending` | Handoff created; PM not done |
-| `pm_done` | Four groomed sections filled; if **Needs human review** is `yes`, Orchestrator pauses until human says go in chat; if `no`, ready for Software Engineer |
-| `dev_done` | Implementation + Evidence complete; ready for QA Engineer |
-| `changes_requested` | QA Engineer rejected (FAIL); Software Engineer must rework |
+| `pending` | Handoff created; PM not done. May hold a **Pending question** from PM |
+| `pm_done` | Four groomed sections filled; if **Needs human review** is `yes`, Orchestrator pauses until human says go in chat; if `no`, ready for Software Engineer. May hold a **Pending question** from Software Engineer without advancing to `dev_done` |
+| `dev_done` | Implementation + Evidence complete; ready for QA Engineer. May hold a **Pending question** from QA without advancing |
+| `changes_requested` | QA Engineer rejected (FAIL); Software Engineer must rework. May hold a **Pending question** from Software Engineer |
 | `approved` | QA Engineer accepted (PASS); Orchestrator must finalize |
 | `blocked` | Stopped (e.g. 2 failed review cycles); human must intervene |
 | `ready_for_human` | Graph finished; human may commit/PR |
@@ -183,14 +225,17 @@ Client adapters stay irrelevant to the graph: gates, statuses, and handoff files
 | `approved` | `ready_for_human` | Orchestrator |
 | any (when `Review cycles` is `2` after `changes_requested`) | `blocked` | Orchestrator |
 
+Specialists may leave Status unchanged when **Pending question** is set (clarification pause). That is not a status transition.
+
 ### Gates (Orchestrator enforces)
 
 | Next node | Required status | Required content |
 |-----------|-----------------|------------------|
 | PM | `pending` | Handoff file exists from template |
-| Human (chat) | `pm_done` and **Needs human review:** `yes` | Ping human with handoff path; wait for approve or correction notes |
-| Software Engineer | `pm_done` with **Needs human review:** `no`, or `pm_done` after human approve, or `changes_requested` | Goal + Acceptance criteria + Out of scope + Constraints filled; **Backlog** `#N` set and backlog item **Status** is `post-groom` or `done` in [`backlog.md`](backlog.md); if rework, Review explains what failed |
-| QA Engineer | `dev_done` | Status `dev_done` (QA re-runs tests; Evidence may be incomplete) |
+| Human (clarification) | any active status with **Pending question** set | Ping human with the one question + options; wait for answer; re-run role named in `From:` |
+| Human (chat) | `pm_done` and **Needs human review:** `yes` | **Pending question** empty; ping human with handoff path; wait for approve or correction notes |
+| Software Engineer | `pm_done` with **Needs human review:** `no`, or `pm_done` after human approve, or `changes_requested` | Goal + Acceptance criteria + Out of scope + Constraints filled; **Pending question** empty; **Backlog** `#N` set and backlog item **Status** is `post-groom` or `done` in [`backlog.md`](backlog.md); if rework, Review explains what failed |
+| QA Engineer | `dev_done` | Status `dev_done`; **Pending question** empty |
 | Orchestrator finalize | `approved` | Review records `## QA: PASS` |
 | Stop / ping human | `changes_requested` with `Review cycles: 2`, or explicit `blocked` | Orchestrator sets `blocked`; do not start Software Engineer |
 
@@ -203,10 +248,16 @@ Use this before each spawn or finalize. It is the **Gates** table as checks — 
 - [ ] Status is `pending`
 - [ ] Handoff file exists (from template)
 
+**Before clarification human answer**
+
+- [ ] **Pending question** holds `From: <role>` plus exactly one question + options
+- [ ] Human has been pinged with that question (and handoff path / backlog `#N` when set)
+
 **Before Human (chat) pause**
 
 - [ ] Status is `pm_done`
 - [ ] **Needs human review** is `yes`
+- [ ] **Pending question** is empty
 - [ ] Human has been pinged with handoff path (and backlog `#N` when set)
 
 **Before Software Engineer**
@@ -214,12 +265,14 @@ Use this before each spawn or finalize. It is the **Gates** table as checks — 
 - [ ] Stop / ping human gate does **not** match
 - [ ] Status is `pm_done` with **Needs human review:** `no`, or `pm_done` after human approve, or `changes_requested`
 - [ ] Goal, Acceptance criteria, Out of scope, Constraints are filled
+- [ ] **Pending question** is empty
 - [ ] **Backlog** `#N` is set and that item’s **Status** is `post-groom` or `done` in `backlog.md`
 - [ ] If `changes_requested`: Review explains what failed
 
 **Before QA Engineer**
 
 - [ ] Status is `dev_done`
+- [ ] **Pending question** is empty
 
 **Before Orchestrator finalize**
 
@@ -230,6 +283,15 @@ Use this before each spawn or finalize. It is the **Gates** table as checks — 
 
 - [ ] `changes_requested` with `Review cycles: 2`, or Status is already `blocked` / must become `blocked`
 - [ ] Do **not** start Software Engineer; set `blocked` if needed; ping human
+
+### Clarification pause (any specialist)
+
+Rules: **Human clarification** above. No human cheatsheet — the ping carries the question and options.
+
+- Status stays at the value the specialist had when it paused (no new status value).
+- **Pending question** holds `From: <role>` plus exactly one question + suggested options.
+- Human replies in **chat** with one answer (option letter or free text).
+- Orchestrator re-runs that role with the answer until the role clears **Pending question** and finishes, or asks again.
 
 ### Human gate after PM
 

@@ -10,6 +10,7 @@ Agents: copy structure from this file mentally. Do **not** treat this path as an
 - **Review cycles:** 0
 - **Backlog:** #2
 - **Needs human review:** no
+- **Pending question:**
 
 ## Goal
 

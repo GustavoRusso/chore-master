@@ -8,6 +8,7 @@ Blank template for live runs. Filled sample (not a live handoff): [`_example.md`
 - **Review cycles:** 0
 - **Backlog:** <!-- #N after PM -->
 - **Needs human review:** <!-- yes | no — PM sets; Orchestrator pauses on yes until human says go -->
+- **Pending question:** <!-- empty | From: <role> then one question + options -->
 
 ## Goal
 
