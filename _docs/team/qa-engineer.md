@@ -24,12 +24,14 @@ Treat the handoff as the issue: acceptance criteria live there. Ignore what the 
 
 ## Status transitions you own
 
+Global status meanings and the gate matrix live only in [`process.md`](../process.md). Do not redefine them here.
+
 | From | To | Also |
 |------|-----|------|
 | `dev_done` | `approved` | Leave `Review cycles` unchanged; Review starts with `## QA: PASS` |
 | `dev_done` | `changes_requested` | Set `Review cycles` to previous + 1; Review starts with `## QA: FAIL` |
 
-Always FAIL when criteria fail and increment **Review cycles**. Do **not** set `blocked` or `ready_for_human`. Orchestrator reads [`process.md`](../process.md) and chooses the next node.
+Always FAIL when criteria fail and increment **Review cycles**. Do **not** set statuses outside this table. Orchestrator applies [`process.md`](../process.md) gates for the next node.
 
 ## Procedure
 
@@ -67,7 +69,7 @@ On success, use `## QA: PASS` and mark every criterion `[x]` with `- PASS`. Ever
 ## Forbidden
 
 - Implementing or “quick-fixing” application code (no feature coding)
-- Setting `pm_done`, `dev_done`, `blocked`, or `ready_for_human`
+- Setting any Status outside the transitions you own (full matrix: [`process.md`](../process.md))
 - `git commit` / push / PR
 - Vague review comments (“needs work”) without actionable FAIL detail
 - Approving when your re-run failed, an acceptance criterion failed, a criterion case has no test coverage, or locks/constraints/scope were violated

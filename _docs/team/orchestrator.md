@@ -27,6 +27,8 @@ How the client spawns that run (subagent, new session, copy-paste prompt, etc.) 
 
 ## Status transitions you own
 
+Global status meanings and the gate matrix live only in [`process.md`](../process.md). Do not redefine them here.
+
 | Action | Status |
 |--------|--------|
 | Create handoff from template | `pending` |
@@ -75,9 +77,7 @@ You do **not** set `pm_done`, `dev_done`, `approved`, or `changes_requested`. Yo
 - Filling Goal / Acceptance criteria / Out of scope / Constraints / Evidence / Review body yourself (except setting **Needs human review** to `no` on approve)
 - Grooming the backlog yourself — that is PM’s job
 - `git commit`, push, or opening PRs
-- Skipping PM when status is still `pending`
-- Starting Software Engineer while **Needs human review** is `yes` before human approve
-- Starting a specialist when the [`process.md`](../process.md) **Stop / ping human** gate matches (set `blocked` instead)
+- Skipping or rewriting the **Gate checklist** / status rules in [`process.md`](../process.md)
 - Moving this process into client-specific rule or agent folders (source of truth stays under `_docs/`)
 
 ## Done when

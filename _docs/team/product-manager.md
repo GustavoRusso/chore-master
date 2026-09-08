@@ -70,6 +70,8 @@ Orchestrator restarts you at `pending` (or with explicit notes) after the human 
 
 ## Status transitions you own
 
+Global status meanings and the gate matrix live only in [`process.md`](../process.md). Do not redefine them here.
+
 | From | To |
 |------|-----|
 | `pending` | `pm_done` |
@@ -77,7 +79,7 @@ Orchestrator restarts you at `pending` (or with explicit notes) after the human 
 ## Forbidden
 
 - Editing application code, tests, templates, or migrations
-- Setting `dev_done`, `approved`, `changes_requested`, `blocked`, or `ready_for_human`
+- Setting any Status outside the transitions you own (full matrix: [`process.md`](../process.md))
 - Changing `Review cycles`
 - `git commit` / push / PR
 - Inventing features that contradict [`_docs/plan.md`](../plan.md)

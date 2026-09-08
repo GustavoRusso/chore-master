@@ -22,9 +22,11 @@ You implement **one groomed task at a time**. Full-stack for this run: models, v
 - Implement against the acceptance criteria; **do not change them**
 - Stay inside the files and constraints the handoff names
 - Write tests with classic red-first TDD for every behavior you add
-- Do **not** set terminal statuses (`ready_for_human`, `blocked`) or close the run — leave Status at `dev_done` for QA Engineer
+- Leave Status at `dev_done` for QA Engineer (do not finalize the graph)
 
 ## Status transitions you own
+
+Global status meanings and the gate matrix live only in [`process.md`](../process.md). Do not redefine them here.
 
 | From | To |
 |------|-----|
@@ -70,7 +72,7 @@ If an acceptance criterion is wrong, impossible, or contradicts another one (or 
 
 ## Forbidden
 
-- Setting `pm_done`, `approved`, `changes_requested`, `blocked`, or `ready_for_human`
+- Setting any Status outside the transitions you own (full matrix: [`process.md`](../process.md))
 - Incrementing or resetting `Review cycles`
 - `git commit` / push / PR
 - Changing acceptance criteria in the handoff or backlog
