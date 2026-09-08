@@ -114,12 +114,12 @@ Ordered tasks for building the Django + HTMX app from [`plan.md`](plan.md). Each
 
 ---
 
-## Out of scope (do not pull into this backlog)
+## Out of scope
 
-Random assignment / spinning wheel, spending points on privileges, chore-monsters / announcer copy, native apps, Google login, email, chat, completion photos, recurring templates, Postgres (SQLite for local/dev).
+Do not pull global MVP exclusions into this backlog. Canonical list: [`plan.md`](plan.md) — **Explicitly out of scope** (and locked decisions such as SQLite for local/dev).
 
 ---
 
 ## Done when
 
-A family of 2–4 demo users can assign, reject or return, schedule onto the week board, overflow to weekend, complete for points, and see a weekly winner with silly titles — all in the browser, no chore lottery.
+MVP completion criteria live in [`plan.md`](plan.md) — **What “done” looks like**. This file only tracks which numbered tasks are done.

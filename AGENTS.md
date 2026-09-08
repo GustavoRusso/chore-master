@@ -1,4 +1,8 @@
-# AGENTS
+# Agent operating instructions
+
+This file is the single entry point for every coding agent. Humans use [README.md](README.md) for a short product introduction.
+
+Agents should always talk in ASD-STE100 Simplified Technical English.
 
 This repo uses a **graph engineering** process for multi-agent work. It is **client-agnostic**: any agentic client that can read these files and run role playbooks may follow it.
 

@@ -15,7 +15,7 @@ A family chore planner built with Django and HTMX. Assign chores to each other, 
 - [Django](https://www.djangoproject.com/) (auth, server-rendered templates)
 - HTMX for inbox and mark-done interactions
 - Small JS for drag-and-drop scheduling
-- SQLite (dev) or Postgres
+- SQLite for local/dev (Postgres deferred; see [`_docs/plan.md`](_docs/plan.md))
 - [uv](https://docs.astral.sh/uv/) for dependencies (inside Docker / the Dev Container)
 
 ## Setup
@@ -53,9 +53,9 @@ Open http://127.0.0.1:8000/
 
 ## MVP scope
 
+Short overview only. Full must-have list, out of scope, and “done” criteria: [`_docs/plan.md`](_docs/plan.md). Build progress: [`_docs/backlog.md`](_docs/backlog.md).
+
 - Sign up / log in; create or join a household via invite code
 - Assign tasks; inbox with accept / decline / send back
 - Week board with S/M/L blocks + weekend overflow
 - Completion points and weekly scoreboard with silly titles
-
-More detail lives in [`_docs/plan.md`](_docs/plan.md).

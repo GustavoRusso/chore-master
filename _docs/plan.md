@@ -93,16 +93,9 @@ flowchart LR
 
 
 
-## Implementation checklist
+## Progress
 
-- [ ] DevContainer + `uv` project layout (`.devcontainer/`, `pyproject.toml`, lockfile); open in container and `uv sync`
-- [ ] Django project: auth, household, invite code
-- [ ] Assign tasks + inbox (accept / decline / send back)
-- [ ] S/M/L Tetris week board + weekend overflow
-- [ ] Completion points, weekly scoreboard, silly titles
-- [ ] Playful CSS/stickers/optional complete sound
-
-
+Ordered build tasks and completion status live in [`backlog.md`](backlog.md). Do not track the same checklist here.
 
 ## What “done” looks like
 
