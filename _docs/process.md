@@ -125,6 +125,7 @@ Client adapters stay irrelevant to the graph: gates, statuses, and handoff files
 
 **Path:** `_docs/handoffs/YYYYMMDD-<slug>.md`  
 **Template:** [`_docs/handoffs/_template.md`](handoffs/_template.md)  
+**Example (filled, not live):** [`_docs/handoffs/_example.md`](handoffs/_example.md)  
 **Groomed shape:** [`_docs/task-template.md`](task-template.md)
 
 ### Lifecycle
@@ -225,6 +226,8 @@ Use this before each spawn or finalize. It is the **Gates** table as checks — 
 - [ ] Do **not** start Software Engineer; set `blocked` if needed; ping human
 
 ### Human gate after PM
+
+Human copy-paste lines: [`human-start.md`](human-start.md).
 
 - Status stays **`pm_done`** while paused (no separate status).
 - Human replies in **chat** (not by editing the handoff).

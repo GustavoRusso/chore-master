@@ -39,7 +39,7 @@ Approve — continue to Software Engineer
 Corrections: <your notes for PM>
 ```
 
-Reply in **chat**. Do not edit the handoff to approve.
+Reply in **chat**. The Orchestrator already gave the handoff path — you do not need to paste it to approve. Do **not** edit the handoff (including Status) to approve or correct; chat only.
 
 ## Resume a run
 

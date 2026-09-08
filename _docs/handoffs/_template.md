@@ -1,5 +1,7 @@
 # Handoff: YYYYMMDD-slug
 
+Blank template for live runs. Filled sample (not a live handoff): [`_example.md`](_example.md).
+
 ## Status
 
 - **Status:** `pending`
