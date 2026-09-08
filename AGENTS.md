@@ -1,12 +1,13 @@
 # Agent operating instructions
 
-This file is the single entry point for every coding agent. Humans use [README.md](README.md) for a short product introduction.
+This file is the single entry point for every coding agent. Humans use [README.md](README.md) for a short product introduction and [`_docs/human-start.md`](_docs/human-start.md) for graph start / approve copy-paste lines.
 
 Agents should always talk in ASD-STE100 Simplified Technical English.
 
 This repo uses a **graph engineering** process for multi-agent work. It is **client-agnostic**: any agentic client that can read these files and run role playbooks may follow it.
 
 - **Process (graph, gates, statuses):** [`_docs/process.md`](_docs/process.md)
+- **Human start card (copy-paste):** [`_docs/human-start.md`](_docs/human-start.md)
 - **Role playbooks:** [`_docs/team/`](_docs/team/)
 - **Handoff template:** [`_docs/handoffs/_template.md`](_docs/handoffs/_template.md)
 - **Product / scope locks:** [`_docs/plan.md`](_docs/plan.md), [`_docs/backlog.md`](_docs/backlog.md)

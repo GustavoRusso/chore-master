@@ -64,6 +64,8 @@ flowchart LR
 
 ## How to start an implementation run
 
+Human copy-paste lines: [`human-start.md`](human-start.md).
+
 1. Human gives a **slug** and optional goal / backlog pointer (`#N`). Work may be a groomed backlog item or something not yet in the backlog (PM will add and groom it).
 2. Orchestrator copies [`_docs/handoffs/_template.md`](handoffs/_template.md) to:
 
@@ -74,6 +76,8 @@ flowchart LR
 4. Orchestrator starts **PM**, then follows gates below. Do **not** start Software Engineer while **Needs human review** is `yes` until the human approves in chat.
 
 ## How to groom only
+
+Human copy-paste lines: [`human-start.md`](human-start.md).
 
 1. Human asks to groom (e.g. “Groom backlog #4” or describes new work).
 2. Agent follows [`_docs/team/product-manager.md`](team/product-manager.md) **standalone** mode — no Orchestrator handoff required.

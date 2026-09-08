@@ -51,6 +51,10 @@ docker run --rm -it -p 8000:8000 \
 
 Open http://127.0.0.1:8000/
 
+## Multi-agent work
+
+To groom backlog items or start an implementation graph in chat, use the copy-paste lines in [`_docs/human-start.md`](_docs/human-start.md). Full process: [`_docs/process.md`](_docs/process.md).
+
 ## MVP scope
 
 Short overview only. Full must-have list, out of scope, and “done” criteria: [`_docs/plan.md`](_docs/plan.md). Build progress: [`_docs/backlog.md`](_docs/backlog.md).
